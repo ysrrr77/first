@@ -34,10 +34,22 @@ git add . : .은 전체를 의미한다. (프로젝트 전체를 add) 어떤 파
 
 git stauts : 변경된 목록이 표시가 된다.
 
-git commit -m "first commit" : 히스토리를 만든다.
+git commit -m "first commit" : 히스토리를 만든다. (m 은 메시지의미)
 
 git remote add origin https://github.com/ysrrr77/first.git : git hub 연동
 
 git remote -v : 연결상태 확인
 
 git push -u origin main : main branch 로 보낸다.
+
+---------------------------------------------------
+변경분을 다시 올릴때
+
+git add .
+
+git stauts
+
+git commit -m "second commit"
+
+git push origin main
+---------------------------------------------------  
