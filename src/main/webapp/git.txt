@@ -1,0 +1,25 @@
+1. git hub 에서 repository 생성 후 
+2. 로컬에 git 다운로드 및 세팅
+3. command 에서 git 입력 후 git bash 에서 아래와 같이 입력하여 세팅
+
+git init
+
+git config --global user.name "yang.yang"
+
+git config --global user.email "ysrrr77@daum.net"
+
+git config --list
+
+
+4. vs code 에서 
+
+Terminal > new Terminal 
+
+git init : git 초기화. 맨처음 프로젝트를 올릴때는 git  init 를 해야한다.
+
+단, git 명령어가 안먹는 경우에는 라이브러리path 에 C:\Program Files\Git\cmd 추가 후 vscod 를 다시 start한다.
+
+git add . : .은 전체를 의미한다. (프로젝트 전체를 add) 어떤 파일을 올릴지 찾아보겠다 의미한다.
+
+git stauts : 변경된 목록이 표시가 된다.
+
