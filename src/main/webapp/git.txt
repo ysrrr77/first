@@ -10,6 +10,16 @@ git config --global user.email "ysrrr77@daum.net"
 
 git config --list
 
+/*
+git hub 에 있는 샘플을 통한 적용
+echo "# first" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/ysrrr77/first.git
+git push -u origin main
+*/
 
 4. vs code 에서 
 
@@ -20,6 +30,14 @@ git init : git 초기화. 맨처음 프로젝트를 올릴때는 git  init 를 �
 단, git 명령어가 안먹는 경우에는 라이브러리path 에 C:\Program Files\Git\cmd 추가 후 vscod 를 다시 start한다.
 
 git add . : .은 전체를 의미한다. (프로젝트 전체를 add) 어떤 파일을 올릴지 찾아보겠다 의미한다.
+(특정 파일만 add 하려면 git add src/main/webapp/git.txt  이런식으로)
 
 git stauts : 변경된 목록이 표시가 된다.
 
+git commit -m "first commit" : 히스토리를 만든다.
+
+git remote add origin https://github.com/ysrrr77/first.git : git hub 연동
+
+git remote -v : 연결상태 확인
+
+git push -u origin main : main branch 로 보낸다.
