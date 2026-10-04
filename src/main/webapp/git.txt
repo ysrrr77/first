@@ -112,7 +112,7 @@ git clone "https://github.com/ysrrr77/first.git" "D:\myprjtest"
 ------------------------------------------------------------------------------------------------------
 branch 생성 후 적용
 
-git checkout -b newBranch : 새로운 branch
+git checkout -b newBranch : 새로운 branch 또는 git branch 브랜치명
 
 git push origin newBranch
 
