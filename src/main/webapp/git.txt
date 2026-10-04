@@ -13,9 +13,6 @@ git config --global user.email "ysrrr77@daum.net"
 
 git config --list
 
-상단수정
-상단수정2
-상단수정3
 ------------------------------------------------------------------------------------------------------
 
 
@@ -140,7 +137,21 @@ git switch main : main branch 로 변경
 
 
 ------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------
+git merge 해결 1
 
-하단 수정
-하단 수정2 
+1. git push origin main 시 충돌
+/*
+! [rejected]        main -> main (non-fast-forward)
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. If you want to integrate the remote changes,
+hint: use 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+*/
+2. git pull 
+3. 에디터에서 편집
+4. git commit -am "머지 편집"
+5. git push origin main 
+6. 변경 완료
+
+
+------------------------------------------------------------------------------------------------------
