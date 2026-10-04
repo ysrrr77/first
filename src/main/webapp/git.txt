@@ -114,5 +114,9 @@ branch 변경 후 적용
 
 git checkout -b newBranch : 새로운 branch
 
-git push origin 
+git push origin newBranch
+
+>> branch 가 새로 생긴다.
+
+
 ------------------------------------------------------------------------------------------------------
