@@ -210,6 +210,24 @@ merge 테스트
 
 1. 1번 에디터 git.txt 변경 후 push, 2번 에디터 다른곳에서 git.txt 변경 후 commit push
 2. 1번 에디터에서 pull 한다. add . commit 작업을 하면 merge 할수 있는 데이터가 팝업된다
-3. 여기서 merge 처리 후에 push 처리 한다.
+3. 에디터가 자동으로 안생시면 git merge 명령어를 치면 수정할 수 있다
+4. 여기서 merge 처리 후에 push 처리 한다.
+
+> 다시정리
+git pull origin main
+> conflic
+
+git add .
+
+git commit -m "머지전"
+
+git merge
+
+git add .
+
+git commit -m "머지 후"
+
+git push origin main
+
 ------------------------------------------------------------------------------------------------------
 
