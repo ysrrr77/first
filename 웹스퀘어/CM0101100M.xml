@@ -1,0 +1,966 @@
+<?xml version="1.0" encoding="UTF-8"?><html xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:w2="http://www.inswave.com/websquare" xmlns:xf="http://www.w3.org/2002/xforms">
+    <head meta_vertical_guides="" meta_horizontal_guides="">
+    	<w2:type>COMPONENT</w2:type>
+    	<w2:buildDate/>
+    	<w2:MSA/>
+    	<xf:model>
+    		<w2:dataCollection baseNode="map">
+              <w2:dataMap baseNode="map" id="dma_MinwonJeopsuJohoeJogeon">
+                    <w2:keyInfo>
+                        <w2:key id="DELETE_YN" name="DELETE_YN" dataType="text"/>
+                        <w2:key id="JEOPSU_NO" name="JEOPSU_NO" dataType="text"/>
+                        <w2:key id="MINWON_FG" name="MINWON_FG" dataType="text"/>
+                    </w2:keyInfo>
+                </w2:dataMap>
+              <w2:dataList baseNode="list" repeatNode="map" id="dlt_MinwonFg" saveRemovedData="true">
+                    <w2:columnInfo>
+                        <w2:column id="GT_GROUP_CD" name="GT_GROUP_CD" dataType="text"/>
+                        <w2:column id="GT_CD" name="GT_CD" dataType="text"/>
+                        <w2:column id="GT_CD_NM1" name="GT_CD_NM1" dataType="text"/>
+                        <w2:column id="GT_CD_NM2" name="GT_CD_NM2" dataType="text"/>
+                        <w2:column id="INDEX1" name="INDEX1" dataType="text"/>
+                        <w2:column id="INDEX2" name="INDEX2" dataType="text"/>
+                        <w2:column id="INDEX3" name="INDEX3" dataType="text"/>
+                        <w2:column id="GOYONG_CD1" name="GOYONG_CD1" dataType="text"/>
+                        <w2:column id="GOYONG_CD2" name="GOYONG_CD2" dataType="text"/>
+                        <w2:column id="GOYONG_CD_NM1" name="GOYONG_CD_NM1" dataType="text"/>
+                        <w2:column id="GOYONG_CD_NM2" name="GOYONG_CD_NM2" dataType="text"/>
+                        <w2:column id="SAYONG_YN" name="SAYONG_YN" dataType="text"/>
+                    </w2:columnInfo>
+                </w2:dataList>
+              <w2:dataList baseNode="list" repeatNode="map" id="dlt_WindowPath" saveRemovedData="true">
+                    <w2:columnInfo>
+                        <w2:column id="W_ID" name="W_ID" dataType="text"/>
+                        <w2:column id="MINWON_FG" name="MINWON_FG" dataType="text"/>
+                        <w2:column id="MINWON_NM" name="MINWON_NM" dataType="text"/>
+                  </w2:columnInfo>
+                  <w2:data use="true">
+                  		<w2:row>
+                            <MINWON_FG><![CDATA[1]]></MINWON_FG>
+                            <MINWON_NM><![CDATA[징수]]></MINWON_NM>
+                            <W_ID><![CDATA[q_qa::QA0101.xml]]></W_ID>
+                        </w2:row>
+                        <w2:row>
+                            <MINWON_FG><![CDATA[2]]></MINWON_FG>
+                            <MINWON_NM><![CDATA[보상]]></MINWON_NM>
+                            <W_ID><![CDATA[/ui/sia/biz/cm/cm01/0101/CM0101101M.xml]]></W_ID>
+                        </w2:row>
+                        <w2:row>
+                            <MINWON_FG><![CDATA[3]]></MINWON_FG>
+                            <MINWON_NM><![CDATA[임금채권]]></MINWON_NM>
+                            <W_ID><![CDATA[q_qa::QA0103.xml]]></W_ID>
+                        </w2:row>
+                        <w2:row>
+                            <MINWON_FG><![CDATA[4]]></MINWON_FG>
+                            <MINWON_NM><![CDATA[법원문서]]></MINWON_NM>
+                            <W_ID><![CDATA[/ui/sia/biz/cm/cm01/0101/CM0101102M.xml]]></W_ID>
+                        </w2:row>
+                        <w2:row>
+                            <MINWON_FG><![CDATA[9]]></MINWON_FG>
+                            <MINWON_NM><![CDATA[일반문서]]></MINWON_NM>
+                            <W_ID><![CDATA[/ui/sia/biz/cm/cm01/0101/CM0101103M.xml]]></W_ID>
+                        </w2:row>
+                  </w2:data>
+                </w2:dataList>
+              <w2:dataMap baseNode="map" id="dma_MinwonFgJohoe">
+                    <w2:keyInfo>
+                        <w2:key id="MINWON_FG" name="MINWON_FG" dataType="text"/>
+                        <w2:key id="JEOPSU_NO" name="JEOPSU_NO" dataType="text"/>
+                    </w2:keyInfo>
+                </w2:dataMap></w2:dataCollection>
+    		<w2:workflowCollection/>
+    		<xf:submission id="sbm_CM0101100M_E001" ref="data:json,dma_MinwonJeopsuJohoeJogeon" target="data:json,dma_MinwonFgJohoe" action="/cm/cm01/0101/CM0101100M_E001.do" method="post" mediatype="application/json"
+       			encoding="UTF-8" instance="" replace="" errorHandler="" customHandler="" mode="asynchronous" processMsg="조회중입니다." ev:submit=""
+       			ev:submitdone="scwin.fn_CallBack" ev:submiterror="" abortTrigger="">
+       		</xf:submission>
+    	</xf:model>
+    	<w2:layoutInfo/>
+    	<w2:publicInfo method=""/>
+    	<script src="/assets/js/biz/z_za.js" scopeExternal="true" scopeVariable="za"></script>
+    	<script lazy="false" type="text/javascript"><![CDATA[/***************************************************************************************
+* 시스템명 : 문서접수관리
+* 업무명   : 업무공통
+* 파일명   : as-is : QA0101.xml
+* 파일명   : to-be : CM0101100M.xml
+* 작성자   : YANG
+* 작성일   : 2024.12.10
+*
+* 설 명 : 문서접수관리
+*---------------------------------------------------------------------------------------
+* 변경일 변경자 변경내역
+*---------------------------------------------------------------------------------------
+* 2024.12.10 YANG	최초 프로그램 작성
+*
+*---------------------------------------------------------------------------------------
+****************************************************************************************/
+
+scwin.v_PMinwonFg   	    = "1";	//민원서류구분 
+scwin.v_PFormloadFg 	    = "S";  //디비젼안에 폼로드시 사용할 변수 S: 신규, J: 조회
+scwin.v_PJeopstNo   	    = "" ;
+scwin.v_WindowYn      	    = "N";
+scwin.v_SiisPgm       	    = "" ; 
+scwin.v_initGubunYn   	    = 0  ; 
+scwin.v_PMinwonDocCd	    = "" ;
+scwin.v_PMinwonDocNm 	    = "" ;
+scwin.v_PMinwonDocChkFg     = true;
+scwin.v_JeopsuNo            = "" ; 
+
+/*******************************************************************************
+ * FUNCTION 명 : onpageload
+ * FUNCTION 기능설명 : 화면 페이지 로드
+*******************************************************************************/
+scwin.onpageload = async function() 
+{
+	debugger;
+	scwin.v_Title=true
+	// sub 화면 실행때문에 await 으로 실행
+   	await com.gfn_LoadForm();
+   	scwin.fn_InitComboBoxForCommonCode();
+   	scwin.fn_Init();   
+   	if (!com.gfn_IsNull(scwin.v_JeopsuNo)) {  // parameter 가 있는 경우 자동 조회 처리
+		// scwin.v_JeopsuNo = scwin.v_ParamJeopsuNo;
+   	    dma_MinwonJeopsuJohoeJogeon.set("JEOPSU_NO", scwin.v_JeopsuNo);
+
+   	    scwin.btn_Johoe_onclick(); 
+   	}
+};
+	
+/*******************************************************************************
+ * FUNCTION 명 : fn_Init
+ * FUNCTION 기능설명 : 화면 초기화.
+*******************************************************************************/
+scwin.fn_Init = function()
+{   
+    if (com.gfn_SsMinwonJeopsuFg() != "1" && com.gfn_SsMinwonJeopsuFg() != "2" && 
+        com.gfn_SsMinwonJeopsuFg() != "3" && com.gfn_SsMinwonJeopsuFg() != "4" ){
+        scwin.v_PMinwonFg = "2"; // '재활보상'으로 기본 셋팅 수정, 2024.04.02
+    }else{    
+        // scwin.v_PMinwonFg = com.gfn_SsMinwonJeopsuFg();
+		scwin.v_PMinwonFg = "2";	// 징수 담당자도 재활보상으로 기본 세팅
+	}
+
+	 // 데이터셋 초기화
+	scwin.fn_InitAllDataSet();
+	
+	scwin.cob_MinwonJeopsuJohoeJogeon_minwonFg_onviewchange();
+	//cob_MinwonJeopsuJohoeJogeon_minwonFg.trigger("onviewchange");
+	
+	dlt_MinwonFg.setColumnFilter("GT_CD<>8");
+    cob_MinwonJeopsuJohoeJogeon_minwonFg.focus();
+    scwin.v_initGubunYn = 1 ; 
+
+	dma_MinwonJeopsuJohoeJogeon.reform();
+	dlt_MinwonFg.reform();
+};
+
+/*******************************************************************************
+ * FUNCTION 명 : scwin.fn_InitAllDataSet
+ * FUNCTION 기능설명 : 데이터셋 초기화.
+*******************************************************************************/
+scwin.fn_InitAllDataSet = function()
+{
+	//민원접수조회조건 DataSet
+	dma_MinwonJeopsuJohoeJogeon.setEmptyValue();	
+	dma_MinwonJeopsuJohoeJogeon.set("MINWON_FG", scwin.v_PMinwonFg);
+	dma_MinwonJeopsuJohoeJogeon.set("JEOPSU_NO", com.gfn_SsJisaCd() + com.substr(com.gfn_GetDate(), 0, 4));	
+};
+
+/*******************************************************************************
+ * FUNCTION 명 : scwin.fn_InitComboBoxForCommonCode
+ * FUNCTION 기능설명 : 콤보박스, 공통코드 세팅
+*******************************************************************************/
+scwin.fn_InitComboBoxForCommonCode = function()
+{
+	// 민원서류구분 코드
+	var codeOptions = [
+		{ code : "Q0001", compID : "cob_MinwonJeopsuJohoeJogeon_minwonFg", dataNm : "dlt_MinwonFg" }
+	];
+
+	com.setCommonCode( codeOptions, function(){
+		com.dataListFilter("dlt_MinwonFg", "GT_CD == '2' || GT_CD == '4' || GT_CD == '9'");  // 재활, 법원문서, 일반문서
+		dlt_MinwonFg.setCellData( dlt_MinwonFg.getMatchedIndex("GT_CD", "2" )[0], "GT_CD_NM1", "재활보상");  // 코드명 변경
+	});
+};
+
+/*******************************************************************************
+ * FUNCTION 명 : scwin.cob_MinwonJeopsuJohoeJogeon_minwonFg_onviewchange
+ * FUNCTION 기능설명 : 선택한 민원구분에 해당하는 민원접수화면을 출력
+*******************************************************************************/
+scwin.cob_MinwonJeopsuJohoeJogeon_minwonFg_onviewchange = function(info) 
+{	
+	if (!com.gfn_IsNull(info) && !com.gfn_IsNull(info.btn_Johoe) && info.btn_Johoe == true) {
+		scwin.v_PFormloadFg = "J";
+	} else {
+		scwin.v_PFormloadFg = "S";
+	}
+	
+	scwin.v_PMinwonFg = dma_MinwonJeopsuJohoeJogeon.get("MINWON_FG"); //민원서류구분 
+	
+	var v_SiisFg     = true;	
+	var v_PopFg      = true;		
+	var v_GyeolJaeFg = true;
+	
+	switch (scwin.v_PMinwonFg) {
+	    case "4" : v_SiisFg     = false;
+				   wfr_CommonTitle.getWindow().txb_Title.setValue("법원문서접수관리");
+	    break;
+	    case "9" : v_SiisFg     = false;	
+				   v_PopFg      = false;	
+				   v_GyeolJaeFg = false;
+				   wfr_CommonTitle.getWindow().txb_Title.setValue("일반문서접수관리");
+		break;
+		default:
+				  v_SiisFg     = false;		
+				  wfr_CommonTitle.getWindow().txb_Title.setValue("보상민원접수관리");
+		break;		  	
+	}
+
+	scwin.fn_ButtonVisible(v_SiisFg, v_PopFg, v_GyeolJaeFg);
+};
+
+/*******************************************************************************
+ * FUNCTION 명 : scwin.fn_ButtonVisible
+ * FUNCTION 기능설명 : 선택한 민원구분에 따른 버튼 비/활성화
+*******************************************************************************/
+scwin.fn_ButtonVisible = function(v_SiisFg, v_PopFg, v_GyeolJaeFg) 
+{
+	// SIIS장애건조회 버튼
+	if (v_SiisFg) {
+		btn_MinwonJeopsuJohoeJogeon_SIISJangaeJohoe.show();
+	} else {
+		btn_MinwonJeopsuJohoeJogeon_SIISJangaeJohoe.hide();
+	}	
+
+	// 접수번호조회 팝업버튼
+	if (v_PopFg) {
+		btn_MinwonJeopsuJohoeJogeon_SelectMinwonJeopsuNoPup.show();
+	} else {
+		btn_MinwonJeopsuJohoeJogeon_SelectMinwonJeopsuNoPup.hide();
+	}	
+
+	if (scwin.v_PFormloadFg == "S") {		
+		mae_MinwonJeopsuJohoeJogeon_jeopsuNo.setValue(com.gfn_SsJisaCd() + com.substr(com.gfn_GetDate(), 0, 4));
+	}
+	
+	scwin.fn_SubWindowLoad();
+};
+
+/*******************************************************************************
+ * FUNCTION 명 : scwin.fn_ButtonVisible
+ * FUNCTION 기능설명 : 선택한 민원구분에 따른 버튼 비/활성화
+*******************************************************************************/
+scwin.fn_SubWindowLoad = function() 
+{
+	var v_Row  = dlt_WindowPath.getMatchedIndex("MINWON_FG", scwin.v_PMinwonFg);
+	
+	var src = dlt_WindowPath.getCellData(v_Row[0], "W_ID");
+	div_import_1_q_qa.setSrc(src);
+
+	gyeoljaeBar.gfn_InitGtGyeoljaeInfo();
+}
+
+/*******************************************************************************
+ * FUNCTION 명 : scwin.fn_WindowRefresh
+ * FUNCTION 기능설명 : 결재처리 후 refresh
+*******************************************************************************/
+scwin.fn_WindowRefresh = function() 
+{	
+	// 결재 영역
+	div_import_1_q_qa.getWindow().scwin.fn_RetrieveMinwonJeopsuInfo(dma_MinwonJeopsuJohoeJogeon.get("JEOPSU_NO"));
+}
+
+/*******************************************************************************
+ * FUNCTION 명 : scwin.btn_MinwonJeopsuJohoeJogeon_SelectMinwonJeopsuNoPup_onclick
+ * FUNCTION 기능설명 : 민원접수정보 팝업
+*******************************************************************************/
+scwin.btn_MinwonJeopsuJohoeJogeon_SelectMinwonJeopsuNoPup_onclick = async function(obj) 
+{
+	
+	if (dma_MinwonJeopsuJohoeJogeon.get("MINWON_FG") != "4") {
+		 var param = "v_Jeopsu_No = " + mae_MinwonJeopsuJohoeJogeon_jeopsuNo.getValue();
+		 param += " v_Minwon_Fg	  = " + cob_MinwonJeopsuJohoeJogeon_minwonFg.getValue();
+
+		 var v_MinwonJeopsuInfo	= Array();
+		 v_MinwonJeopsuInfo		= await com.gfn_Dialog("/ui/sia/biz/cm/cm00/CM0001720P.xml", param, 1400, 620, "민원접수내역검색");
+		
+		 if(!com.gfn_IsNull(v_MinwonJeopsuInfo[0])) {
+			mae_MinwonJeopsuJohoeJogeon_jeopsuNo.setValue(v_MinwonJeopsuInfo[0]);
+			mae_MinwonJeopsuJohoeJogeon_jeopsuNo.commit();
+
+			await scwin.btn_Johoe_onclick();
+		 }	
+		 mae_MinwonJeopsuJohoeJogeon_jeopsuNo.focus();
+	} else {
+		var v_Flag = "click";		  
+		var v_Param  = "v_JeopsuNo=" + mae_MinwonJeopsuJohoeJogeon_jeopsuNo.getValue().replace(/[\-]/g, "");
+		v_Param += " v_DateGubun=" + "4";
+
+		var v_SongMuMinwonJeopsuInfo = Array();
+		v_SongMuMinwonJeopsuInfo = await za.cfn_GetSongmuMinwonInfo(v_Flag, v_Param);	
+			
+		if (!com.gfn_IsNull(v_SongMuMinwonJeopsuInfo[0])) {
+			mae_MinwonJeopsuJohoeJogeon_jeopsuNo.setValue(v_SongMuMinwonJeopsuInfo[8]);
+			mae_MinwonJeopsuJohoeJogeon_jeopsuNo.commit();
+			await scwin.btn_Johoe_onclick();
+		 }	
+		 mae_MinwonJeopsuJohoeJogeon_jeopsuNo.focus();		
+	}
+}
+
+/*******************************************************************************
+ * FUNCTION 명 : scwin.btn_MinwonJeopsuJohoeJogeon_SIISJangaeJohoe_onclick
+ * FUNCTION 기능설명 : 4대보험연계장애건접수목록을 조회할 수 있는 화면을 Open
+*******************************************************************************/
+scwin.btn_MinwonJeopsuJohoeJogeon_SIISJangaeJohoe_onclick = async function(e)
+{
+    var param = "scwin.v_JeopsuNo="+ dma_MinwonJeopsuJohoeJogeon.get("JEOPSU_NO");
+
+	//await com.gfn_Alert("준비중입니다.");
+	/*
+	해당건 가입납부에서만 처리함
+    var v_RetStr = Array();
+    v_RetStr = com.gfn_Dialog("q_qa::QA0116.xml",param);
+    if (!com.gfn_IsNull(v_RetStr[0])) {
+		dma_MinwonJeopsuJohoeJogeon.set("JEOPSU_NO", v_RetStr[0]);
+		scwin.btn_Johoe_onclick();
+	} else {
+		mae_MinwonJeopsuJohoeJogeon_jeopsuNo.focus();
+	}
+	*/
+}	
+
+/*******************************************************************************
+ * FUNCTION 명 : scwin.btn_Johoe_onclick
+ * FUNCTION 기능설명 : 민원접수조회조건에 따른 접수정보를 조회
+*******************************************************************************/
+scwin.btn_Johoe_onclick = async function(e) 
+{ 
+	var v_JeopsuNo1 = dma_MinwonJeopsuJohoeJogeon.get("JEOPSU_NO").replace(/[\-]/g, "");
+	if (com.gfn_IsNull(v_JeopsuNo1)) {
+		var v_Msg = ["접수번호"];
+		await com.gfn_MsgAlert("MZZA018", v_Msg); //필수 입력 항목입니다. @ 항목을 입력하십시오.
+
+		mae_MinwonJeopsuJohoeJogeon_jeopsuNo.focus();
+		return;
+	}
+		
+	scwin.fn_Search();
+}
+
+/*******************************************************************************
+ * FUNCTION 명 : scwin.fn_Search
+ * FUNCTION 기능설명 : 조회
+*******************************************************************************/
+scwin.fn_Search = function(action) 
+{
+	/*
+	var srvId		 = "";
+	var strURL		 = "";
+	var strinDsList	 = "";
+	var stroutDsList = "";
+	var strArgument	 = "";
+	var strCallback  = "scwin.fn_CallBack";
+	
+	switch(action) {
+	
+		case "RetrieveMinwonFgInfoCmd" 	:
+			srvId		 = "RetrieveMinwonFgInfoCmd";
+			strURL		 = "kcw.q.qa.cmd.RetrieveMinwonFgInfoCmd.do";
+			strinDsList	 = "dma_MinwonJeopsuJohoeJogeon=dma_MinwonJeopsuJohoeJogeon";
+			stroutDsList = "dma_MinwonFgJohoe=dma_MinwonFgJohoe";		
+		break;		
+	}
+	
+	com.gfn_CallService(srvId, strURL, strinDsList, stroutDsList, strArgument, strCallback, false, true, true);
+	*/
+
+	// 민원구분 조회
+	dma_MinwonFgJohoe.setEmptyValue();
+	dma_MinwonJeopsuJohoeJogeon.set("JEOPSU_NO", dma_MinwonJeopsuJohoeJogeon.get("JEOPSU_NO").replace(/[\-]/g, ""));
+	com.executeSubmission(sbm_CM0101100M_E001);
+}
+
+/*******************************************************************************
+ * FUNCTION 명 : scwin.fn_CallBack
+ * FUNCTION 기능설명 : 콜백함수
+*******************************************************************************/ 
+scwin.fn_CallBack = async function(e)
+{
+	var errorCode = com.getResultCode(e);
+	
+	// Error 인 경우 후 처리를 하지 않는다
+	if(errorCode != "S") {
+		return;
+	}
+	
+	var srvId = e.id;
+	srvId = srvId.substring(srvId.indexOf("sbm_"), srvId.length);
+	if(srvId == "sbm_CM0101100M_E001") {  // 민원구분 조회
+
+		dma_MinwonJeopsuJohoeJogeon.set("JEOPSU_NO", dma_MinwonJeopsuJohoeJogeon.get("JEOPSU_NO").replace(/[\-]/g, ""));
+		scwin.v_PJeopstNo = dma_MinwonJeopsuJohoeJogeon.get("JEOPSU_NO");
+
+		if (!com.gfn_IsNull(dma_MinwonFgJohoe.get( "MINWON_FG"))) {			
+			if (scwin.v_PMinwonFg == dma_MinwonFgJohoe.get("MINWON_FG") && com.gfn_IsNull(scwin.v_JeopsuNo)) {				
+				
+				div_import_1_q_qa.getWindow().scwin.fn_RetrieveMinwonJeopsuInfo(scwin.v_PJeopstNo);
+			} else { // 민원구분이 바뀐경우
+				//dma_MinwonJeopsuJohoeJogeon.FireEvent = false;
+				dma_MinwonJeopsuJohoeJogeon.set("MINWON_FG", dma_MinwonFgJohoe.get("MINWON_FG")); //민원서류구분 
+				//dma_MinwonJeopsuJohoeJogeon.FireEvent = true;				
+				
+				scwin.cob_MinwonJeopsuJohoeJogeon_minwonFg_onviewchange({"btn_Johoe":true});
+				if (!com.gfn_IsNull(scwin.v_JeopsuNo)) {
+				    scwin.v_JeopsuNo = "" ; 
+				}
+			}	
+		} else {
+			if (scwin.v_PMinwonFg == "9") { //일반문서
+				
+				div_import_1_q_qa.getWindow().scwin.fn_RetrieveMinwonJeopsuInfo(scwin.v_PJeopstNo);
+			} else {
+				await com.gfn_Alert("접수번호가 유효하지 않습니다.");
+				mae_MinwonJeopsuJohoeJogeon_jeopsuNo.focus();
+			}
+		}
+	}
+}
+
+/*******************************************************************************
+ * FUNCTION 명 : scwin.fn_Close
+ * FUNCTION 기능설명 : 화면 닫기 (MDI를 닫을 때 호출)
+*******************************************************************************/ 
+scwin.fn_Close = function() {
+	//ds변경여부 판단.
+	var dsArr = Array();
+	if (cob_MinwonJeopsuJohoeJogeon_minwonFg.getValue() != "9") {
+
+		dsArr[0] = div_import_1_q_qa.getWindow().dma_JeopsuInfo;
+
+		return com.gfn_IsUpdatedDataset(dsArr); 
+	}else{
+	    dsArr[0] = div_import_1_q_qa.getWindow().ds_IlbanMunseoJeopsuInfo;
+	    
+		return com.gfn_IsUpdatedDataset(dsArr); 
+	}
+}
+
+/*******************************************************************************
+ * FUNCTION 명 : scwin.mae_MinwonJeopsuJohoeJogeon_jeopsuNo_onblur
+ * FUNCTION 기능설명 : 접수번호 blur
+*******************************************************************************/ 
+scwin.mae_MinwonJeopsuJohoeJogeon_jeopsuNo_onblur = function(e)
+{   
+	/*
+	if (cob_MinwonJeopsuJohoeJogeon_minwonFg.getValue() != "9") {
+	    var Value = com.gfn_GetMaskFullValue("mae_MinwonJeopsuJohoeJogeon_jeopsuNo").replace(/[\-]/g, "");
+        mae_MinwonJeopsuJohoeJogeon_jeopsuNo.setValue(Value);
+    }    
+	*/
+}
+
+/*******************************************************************************
+ * FUNCTION 명 : scwin.mae_MinwonJeopsuJohoeJogeon_jeopsuNo_onviewchange
+ * FUNCTION 기능설명 : 접수번호 변경
+*******************************************************************************/ 
+scwin.mae_MinwonJeopsuJohoeJogeon_jeopsuNo_onviewchange = function(info) {
+	if (cob_MinwonJeopsuJohoeJogeon_minwonFg.getValue() != "9") {
+	    var Value = com.gfn_GetMaskFullValue("mae_MinwonJeopsuJohoeJogeon_jeopsuNo").replace(/[\-]/g, "");
+        mae_MinwonJeopsuJohoeJogeon_jeopsuNo.setValue(Value);
+    }    
+};
+
+
+/*******************************************************************************
+ * FUNCTION 명 : scwin.mae_MinwonJeopsuJohoeJogeon_jeopsuNo_onkeydown
+ * FUNCTION 기능설명 : 접수번호 keydown
+*******************************************************************************/ 
+scwin.mae_MinwonJeopsuJohoeJogeon_jeopsuNo_onkeydown = async function(e)
+{
+	if (e.keyCode == 13) {
+		// keyDown이벤트가 change이벤트보다 먼저발생하기때문에 강제 설정해준다.
+		dma_MinwonJeopsuJohoeJogeon.set("JEOPSU_NO", com.gfn_GetMaskFullValue("mae_MinwonJeopsuJohoeJogeon_jeopsuNo").replace(/[\-]/g, ""));
+
+		if (!com.gfn_IsNull(dma_MinwonJeopsuJohoeJogeon.get("JEOPSU_NO").replace(/[\-]/g, ""))) {
+			await scwin.btn_Johoe_onclick();
+		} else {
+			scwin.btn_MinwonJeopsuJohoeJogeon_SIISJangaeJohoe_onclick();
+		}
+	}
+}
+
+/*******************************************************************************
+ * FUNCTION 명 : scwin.fn_SubUpdateChk
+ * FUNCTION 기능설명 : 데이터셋 변경 여부 체크
+*******************************************************************************/ 
+scwin.fn_SubUpdateChk = async function(dsObjs, gyeoljaeFg) 
+{	
+	debugger;
+	var v_Msg  = Array();
+
+	if (dsObjs == null || dsObjs.length  == 0) {
+		return false;
+	}	
+	
+	for(var i=0;i<dsObjs.length; i++) {
+		console.log(dsObjs[i].getModifiedIndex());
+		if (!com.gfn_IsNull(dsObjs[i].getModifiedIndex())) {  // getModifiedIndex : array 리턴		
+			v_Msg[0] = "입력된 데이터";
+			var conRtn = await com.gfn_Confirm("입력된 데이터를 초기화 하시겠습니까?");
+			if(!conRtn){ 	
+				return false;
+			} 
+		}
+	}
+	
+	scwin.v_initGubunYn = 0 ; 
+	div_import_1_q_qa.getWindow().scwin.fn_Init();
+	scwin.fn_InitAllDataSet();
+
+	if (gyeoljaeFg) {
+		// com.gfn_initGtGyeolJaeInfo();
+	}
+	scwin.v_initGubunYn = 1 ; 
+
+	return true;	
+}
+
+/*******************************************************************************
+ * FUNCTION 명 : scwin.fn_SubSaveEvtSet
+ * FUNCTION 기능설명 : 저장이벤트 발생시 다음정보를 기본적으로 세팅 
+*******************************************************************************/ 
+scwin.fn_SubSaveEvtSet = function(dsObj) {
+
+	if (com.gfn_IsNull(dsObj.get("JEOPSU_NO"))) {
+	
+		dsObj.set("MINWON_FG"				 , scwin.v_PMinwonFg);
+		dsObj.set("MINWON_DOC_FG"			 , "1");
+		dsObj.set("JEOPSU_FG"				 , "1");
+		dsObj.set("MINWON_JIKGWON_ONLINE_FG" , "2");
+		dsObj.set("CHEORI_JISA_CD"			 , dsObj.get("GWANRI_JISA_CD"));	
+
+		if (com.gfn_IsNull(dsObj.get("FIRST_DAMDANGJA_ID"))) {
+			dsObj.set("FIRST_DAMDANGJA_ID", dsObj.get("DAMDANGJA_ID"));
+			dsObj.set("FIRST_DAMDANGJA_NM", dsObj.get("DAMDANGJA_NM"));
+		}
+	}	
+}
+
+/*******************************************************************************
+ * FUNCTION 명 : scwin.fn_SubEmailSet
+ * FUNCTION 기능설명 : 이메일 정보 세팅 
+ * PARAM 정보 : dsObj => 셋팅할 데이터셋, colNms => Email 컬럼명들, smFg => 플래그(Split : 분리, Merge : 병합)
+*******************************************************************************/ 
+scwin.fn_SubEmailSet = function(dsObj, colNms, smFg){
+	var v_Email;
+	if(smFg == "Merge") {	
+		for(var inx = 0; inx < colNms.length; inx++) {
+			if(!com.gfn_IsNull(dsObj.get(colNms[inx] + "1")) &&
+			   !com.gfn_IsNull(dsObj.get(colNms[inx] + "2")) ) {
+			   v_Email = dsObj.get(colNms[inx] + "1") + "@" + dsObj.get(colNms[inx] + "2");
+			   dsObj.set(colNms[inx], v_Email);
+			}
+		}
+	} else if(smFg == "Split") {	
+		for(var inx = 0; inx < colNms.length; inx++) {
+			if(!com.gfn_IsNull(dsObj.get(colNms[inx]))) {
+				v_Email = com.split(dsObj.get(colNms[inx]), "@", "webstyle");
+				dsObj.set(colNms[inx] + "1", v_Email[0]);
+				dsObj.set(colNms[inx] + "2", v_Email[1]);
+			}
+		}	
+	} 
+}
+
+/*******************************************************************************
+ * FUNCTION 명 : scwin.fn_SubMinwonDocCdSet
+ * FUNCTION 기능설명 : 민원서류 조회
+*******************************************************************************/ 
+scwin.fn_SubMinwonDocCdSet = async function(obj, dsObj, v_Flag, nextCom, oldMinwonCd, oldMinwonNm) {
+	debugger;
+    var v_Param = "";
+		v_Param += "v_Minwon_Cd=" + dsObj.get("MINWON_DOC_CD");
+		v_Param += " v_Minwon_Fg=" + scwin.v_PMinwonFg;
+		v_Param += " v_SayongYN=Y";
+		v_Param += " v_MinwonJikGwon_Fg=1";  // 1: 민원서류만 검색 , 2: 직권만 검색  NULL: 둘다	    
+    
+	var v_MinwonInfo = Array();
+	v_MinwonInfo = await za.cfn_GetMinwonDocInfo(v_Flag, v_Param);
+		
+	if (!com.gfn_IsNull(v_MinwonInfo[0])) {
+	
+		if (com.gfn_IsNull(oldMinwonCd)) {		
+			dsObj.set("MINWON_DOC_CD"	, v_MinwonInfo[0]);
+			dsObj.set("MINWON_DOC_NM"	, v_MinwonInfo[1]);
+			dsObj.set("TABLE_NM"     	, v_MinwonInfo[7]);
+			dsObj.set("SJ_TABLE_NM"	    , v_MinwonInfo[7]);
+			dsObj.set("GY_TABLE_NM"	    , v_MinwonInfo[8]);
+			dsObj.set("IC_TABLE_NM"	    , v_MinwonInfo[9]);	
+
+			if (!com.gfn_IsNull(v_MinwonInfo[6])) {
+			    dsObj.set("PROGRAM_ID"   , v_MinwonInfo[6]); 
+			} else {
+			    dsObj.set("PROGRAM_ID"   , v_MinwonInfo[5]); 
+			}
+			nextCom.focus();
+
+		} else {	// 징수화면 민원서류코드 변경에 대한 제약조건체크(보상에서 해당 로직 안탐)
+			
+			if (div_import_1_q_qa.getWindow().fn_ChangeMinwonDocCd(oldMinwonCd, v_MinwonInfo[0], v_MinwonInfo[7], v_MinwonInfo[8], v_MinwonInfo[9])){
+				dsObj.set("MINWON_DOC_CD"	, v_MinwonInfo[0]);
+				dsObj.set("MINWON_DOC_NM"	, v_MinwonInfo[1]);
+				dsObj.set("SJ_TABLE_NM"		, v_MinwonInfo[7]);
+				dsObj.set("GY_TABLE_NM"		, v_MinwonInfo[8]);
+				dsObj.set("IC_TABLE_NM"		, v_MinwonInfo[9]);	
+				if (!com.gfn_IsNull(v_MinwonInfo[6])) {
+			        dsObj.set("PROGRAM_ID"   , v_MinwonInfo[6]); 
+			    }else{
+			        dsObj.set("PROGRAM_ID"   , v_MinwonInfo[5]); 
+			    }
+			} else {
+				dsObj.set("MINWON_DOC_CD", oldMinwonCd);
+				dsObj.set("MINWON_DOC_NM", oldMinwonNm);
+			}
+			nextCom.focus();	
+		}
+		if (!scwin.v_PMinwonDocChkFg) {
+			dsObj.set("MINWON_DOC_NM"	, scwin.v_PMinwonDocNm);
+			scwin.v_PMinwonDocChkFg = true;
+		}
+	} else {
+		obj.focus();
+	}
+}
+
+/*******************************************************************************
+ * FUNCTION 명 : scwin.fn_SubMinwonDocCdAllSet
+ * FUNCTION 기능설명 : 민원서류 조회
+*******************************************************************************/ 
+scwin.fn_SubMinwonDocCdAllSet = async function(obj, dsObj, v_Flag, nextCom, oldMinwonCd, oldMinwonNm) {
+
+    var v_Param = "";
+		v_Param += "v_Minwon_Cd=" + dsObj.get("MINWON_DOC_CD");
+		v_Param += " v_Minwon_Fg=" + scwin.v_PMinwonFg;
+		v_Param += " v_SayongYN=Y";
+    
+	var v_MinwonInfo = Array();
+		v_MinwonInfo = await za.cfn_GetMinwonDocInfo(v_Flag, v_Param);
+		
+	if (!com.gfn_IsNull(v_MinwonInfo[0])) {
+	
+		if (com.gfn_IsNull(oldMinwonCd)) {
+		
+			dsObj.set("MINWON_DOC_CD"	, v_MinwonInfo[0]);
+			dsObj.set("MINWON_DOC_NM"	, v_MinwonInfo[1]);
+			dsObj.set("TABLE_NM"     	, v_MinwonInfo[7]);
+			dsObj.set("SJ_TABLE_NM"		, v_MinwonInfo[7]);
+			dsObj.set("GY_TABLE_NM"		, v_MinwonInfo[8]);
+			dsObj.set("IC_TABLE_NM"		, v_MinwonInfo[9]);	
+
+			if (!com.gfn_IsNull(v_MinwonInfo[6])) {
+			    dsObj.set("PROGRAM_ID"   , v_MinwonInfo[6]); 
+			} else {
+			    dsObj.set("PROGRAM_ID"   , v_MinwonInfo[5]); 
+			}
+			nextCom.focus();
+		} else {//징수화면 민원서류코드 변경에 대한 제약조건체크
+			
+			if (div_import_1_q_qa.getWindow().getWindow().fn_ChangeMinwonDocCd(oldMinwonCd, v_MinwonInfo[0], v_MinwonInfo[7], v_MinwonInfo[8], v_MinwonInfo[9])) {
+				dsObj.set("MINWON_DOC_CD"	, v_MinwonInfo[0]);
+				dsObj.set("MINWON_DOC_NM"	, v_MinwonInfo[1]);
+				dsObj.set("SJ_TABLE_NM"		, v_MinwonInfo[7]);
+				dsObj.set("GY_TABLE_NM"		, v_MinwonInfo[8]);
+				dsObj.set("IC_TABLE_NM"		, v_MinwonInfo[9]);	
+
+				if (!com.gfn_IsNull(v_MinwonInfo[6])) {
+			        dsObj.set("PROGRAM_ID"   , v_MinwonInfo[6]); 
+			    } else {
+			        dsObj.set("PROGRAM_ID"   , v_MinwonInfo[5]); 
+			    }
+			} else {
+				dsObj.set("MINWON_DOC_CD", oldMinwonCd);
+				dsObj.set("MINWON_DOC_NM", oldMinwonNm);
+			}
+			nextCom.focus();	
+		}
+
+		if (!scwin.v_PMinwonDocChkFg) {
+			dsObj.set("MINWON_DOC_NM"	, scwin.v_PMinwonDocNm);
+			scwin.v_PMinwonDocChkFg = true;
+		}
+	} else {
+		obj.focus();
+	}
+}
+
+/*******************************************************************************
+ * FUNCTION 명 : scwin.fn_SubMinwoninInfoRetrieve
+ * FUNCTION 기능설명 : 민원인성명조회 (민원인정보를 조회할 수 있는 화면을 Open)
+*******************************************************************************/ 
+scwin.fn_SubMinwoninInfoRetrieve = async function(dsObj, curRgno, curCom, nextCom, colNms, vFlag) 
+{
+	var v_Flag  = vFlag;
+    var v_param = "v_Customer_Nm=" + com.trim(curCom.getValue()) +
+                  " v_Customer_Rgno=" + com.trim(curRgno.getValue()) +
+                  " v_Taa100mt_SearchYn=" + com.trim("Y");
+
+    var v_MinwoninInfo = Array();    
+    v_MinwoninInfo = await za.cfn_GetCustomerInfo(v_Flag, v_param);
+
+    if (!com.gfn_IsNull(v_MinwoninInfo[5])) {
+		dsObj.set("MINWONIN_NM"				, v_MinwoninInfo[ 5]);
+		dsObj.set("MINWONIN_RGNO"			, v_MinwoninInfo[ 6]);
+		dsObj.set("MINWONIN_EMAIL"			, v_MinwoninInfo[45]);
+		dsObj.set("MINWONIN_DDD"			, v_MinwoninInfo[34]);
+		dsObj.set("MINWONIN_TEL1"			, v_MinwoninInfo[35]);
+		dsObj.set("MINWONIN_TEL2"			, v_MinwoninInfo[36]);
+		dsObj.set("MINWONIN_HP_DDD"			, v_MinwoninInfo[38]);
+		dsObj.set("MINWONIN_HP_TEL1"		, v_MinwoninInfo[39]);
+		dsObj.set("MINWONIN_HP_TEL2"		, v_MinwoninInfo[40]);
+		dsObj.set("MINWONIN_POST"			, v_MinwoninInfo[8 ]);
+		dsObj.set("MINWONIN_POST_SER"		, v_MinwoninInfo[9 ]);
+		dsObj.set("MINWONIN_GIBON_ADDR"		, v_MinwoninInfo[22]);
+		dsObj.set("MINWONIN_SANGSE_ADDR"	, v_MinwoninInfo[23]);
+		dsObj.set("MINWONIN_FAX_DDD"		, v_MinwoninInfo[42]);
+		dsObj.set("MINWONIN_FAX_TEL1"		, v_MinwoninInfo[43]);
+		dsObj.set("MINWONIN_FAX_TEL2"		, v_MinwoninInfo[44]);
+		scwin.fn_SubEmailSet(dsObj, colNms, "Split");
+		nextCom.focus();
+		return "RTN_Y"; 
+	} else {
+		curCom.focus();
+		return "RTN_N" ; 
+	}
+}
+
+/*******************************************************************************
+ * FUNCTION 명 : scwin.fn_SubPreInfoInit
+ * FUNCTION 기능설명 : 민원인정보 초기화
+*******************************************************************************/ 
+scwin.fn_SubPreInfoInit = function(dsObj, colNm, skipColNm) {
+	var v_ColId = "";
+	for (var colInx = 0; colInx < dsObj.colcount; colInx++) {
+		v_ColId = dsObj.getKey(colInx);
+		if(v_ColId == decode(com.gfn_IsNull(skipColNm), 1, "" , skipColNm)) continue;
+
+		if(com.indexOf(v_ColId, colNm) == 0) {
+			dsObj.set(v_ColId, "");
+		}
+	}
+}
+
+/*******************************************************************************
+ * FUNCTION 명 : scwin.fn_SubJeopsuFgChk
+ * FUNCTION 기능설명 : 접수구분 체크
+*******************************************************************************/ 
+scwin.fn_SubJeopsuFgChk = async function(v_JeopsuFg) 
+{
+	if (v_JeopsuFg == "3") {	// 4대보험 민원접수
+		if (scwin.v_PMinwonDocCd != "8000" && scwin.v_PMinwonDocCd != "8001" 
+		 && scwin.v_PMinwonDocCd != "8002" && scwin.v_PMinwonDocCd != "8003" 
+		 && scwin.v_PMinwonDocCd != "8004" && scwin.v_PMinwonDocCd != "8005" 
+		 && scwin.v_PMinwonDocCd != "8028"){ // 민원코드 8000~8005, 8028 수정 가능하도록 개선 2014.05.08
+			await com.gfn_Alert("4대보험연계접수된 민원(접수구분 3)은 수정할 수 없습니다.\n외부시스템연계민원접수처리화면에서 수정하십시오.");
+
+			return false;
+		}	
+	} else if (v_JeopsuFg == "4") {	// 토탈민원접수
+		if (scwin.v_PMinwonDocCd != "8000" && scwin.v_PMinwonDocCd != "8002" &&
+			scwin.v_PMinwonDocCd != "8004" && scwin.v_PMinwonDocCd != "5072" &&
+			scwin.v_PMinwonDocCd != "5073" && scwin.v_PMinwonDocCd != "5082" &&
+			scwin.v_PMinwonDocCd != "5083") {  // 민원코드 8000,8002,8004 수정 가능하도록 개선 2020.05.26	// 2021.07.23 - by 김재석 : 5073 수정가능하게 개선. // 2021.09.03 - by 김태성 : 5082,5083 추가
+			await com.gfn_Alert("토탈서비스로 접수된 민원(접수구분 4)은 수정할 수 없습니다.\n단, 담당자 변경은 외부시스템연계민원접수처리화면에서 가능합니다.");
+
+			return false;
+		}
+	} else if(v_JeopsuFg == "5") {  // 사무대행기관 접수 
+		if(scwin.v_PMinwonDocCd != "8000" && scwin.v_PMinwonDocCd != "8002" 
+		&& scwin.v_PMinwonDocCd != "8004") { // 민원코드 8000,8002,8004 수정 가능하도록 개선 2020.05.26
+			await com.gfn_Alert("토탈서비스로 접수된 민원(접수구분 5)은 수정할 수 없습니다.\n단, 담당자 변경은 외부시스템연계민원접수처리화면에서 가능합니다.");
+
+			return false;
+		}
+	} 
+
+	return true;
+}
+
+/*******************************************************************************
+ * FUNCTION 명 : scwin.fn_SubCheckRgno
+ * FUNCTION 기능설명 : 주민등록번호 체크
+*******************************************************************************/ 
+scwin.fn_SubCheckRgno = async function(obj, strVal)
+{
+	var v_Rgno = com.trim(com.replace(strVal, "-", ""));
+	var v_Msg = "잘못된 주민등록번호 체계입니다. 계속하시겠습니까?";
+	if (!com.gfn_CheckJumin(v_Rgno)) {
+		//if(com.gfn_Confirm(v_Msg)) {		
+		var conRtn = await com.gfn_Confirm(v_Msg);
+		if(conRtn){ 	
+			return true;
+		} else {
+			obj.focus();
+			return false;
+		}
+	} 
+
+	return true;	
+}
+
+/*******************************************************************************
+ * FUNCTION 명 : scwin.fn_SubUpdateCheckMinwonDocCd
+ * FUNCTION 기능설명 : 조회조건의 민원구분변경시 메세지처리
+*******************************************************************************/ 
+scwin.fn_SubUpdateCheckMinwonDocCd = async function(varNewValue, v_ReInputYn)
+{
+	scwin.v_PMinwonDocChkFg = true;
+	if (!com.gfn_IsNull(scwin.v_PMinwonDocCd)) {
+		
+		if (!(!com.gfn_IsNull(v_ReInputYn) && v_ReInputYn == "Y") && scwin.v_PMinwonDocCd != varNewValue) {
+		    
+			// if (!com.gfn_Confirm("민원서류코드를 변경하시겠습니까?") == "1") {
+			var conRtn = await com.gfn_Confirm("민원서류코드를 변경하시겠습니까?");
+			if(conRtn){ 	
+				// 
+			} else {
+				scwin.v_PMinwonDocChkFg = false;
+			}
+		}
+	} 
+
+	return scwin.v_PMinwonDocChkFg;
+}
+
+/*******************************************************************************
+ * FUNCTION 명 : scwin.fn_SiisYgProgramHochul
+ * FUNCTION 기능설명 : 연계 호출
+*******************************************************************************/ 
+scwin.fn_SiisYgProgramHochul = function(){
+    /*
+	추후 작업
+    if(com.gfn_IsNull(GetReg("SiisYgHwamyeonYn")) || GetReg("SiisYgHwamyeonYn") == "N")
+	{
+		
+		open("q_qa::QA0128.xml","", 1024, 768, "StatusBar=false Resize=true TaskBar=true", -1, -1);
+		//open("q_qa::QA0128.xml","", 1200, 768, "StatusBar=false Resize=true TaskBar=true", -1, -1);
+		
+	} else {
+	    QA0128.focus();
+	    
+	}
+	*/
+}
+
+/*******************************************************************************
+ * FUNCTION 명 : scwin.onpageunload
+ * FUNCTION 기능설명 : 화면 페이지 unload
+*******************************************************************************/ 
+scwin.onpageunload = function()
+{
+	WebSquare.session.setAttribute( "SiisYgHwamyeonYn", "N" );
+}
+
+/*******************************************************************************
+ * FUNCTION 명 : scwin.fn_SetRButton
+ * FUNCTION 기능설명 : 상단에 연계버튼추가
+*******************************************************************************/ 
+scwin.fn_SetRButton = function()
+{
+	var v_Array = Array();	
+	v_Array[0] = "연계화면이동|scwin.fn_SubYgHwamyeon|R";
+	
+	return v_Array;
+}
+
+/*******************************************************************************
+ * FUNCTION 명 : scwin.fn_SubYgHwamyeon
+ * FUNCTION 기능설명 : 연계버튼클릭시 동작
+*******************************************************************************/ 
+scwin.fn_SubYgHwamyeon = function()
+{
+	// 연계 버튼 클릭
+	div_import_1_q_qa.getWindow().scwin.btn_YgHwamyeon_onclick();
+}
+
+
+]]></script>
+<w2:require as="udc_fixed_bottom" type="page" variableClone="true" src="/cm/udc/fixed_bottom.xml"></w2:require>
+    </head>
+    <body ev:onpageload="scwin.onpageload">
+    	<!-- page title -->
+    	<!-- 
+    	<xf:group class="page_title" id="" style="">
+    		<xf:group class="fl" id="" style="" tagname="h2">
+    			<w2:textbox class="" id="txt_minwon_title" label="보상민원접수관리" style="" tagname="strong"/>
+    		</xf:group>
+    		<xf:group class="btnbox fr" id="" style="">
+    			<xf:group class="btn cr1" id="" text="이미지" style="" tagname="button"/>
+    			<xf:group class="btn cr1" id="" text="My메뉴추가" style="" tagname="button"/>
+    		</xf:group>
+    	</xf:group>
+    	 -->
+    	<!-- /page title -->
+    	
+    	<!-- page title -->
+		<w2:wframe class="page_header" id="wfr_CommonTitle" src="/ui/sia/common/wfTitle.xml" style=""></w2:wframe>
+		<!-- /page title -->    	
+		
+    	
+    	<!-- search -->
+    	<xf:group class="schbox" id="" style="">
+    		<xf:group class="schbox_inner" id="" style="">
+    			<xf:group adaptive="layout" adaptiveThreshold="768" class="w2tb tbl " id="" style="" tagname="table">
+    				<w2:attributes>
+    					<w2:summary/>
+    				</w2:attributes>
+    				<xf:group tagname="colgroup">
+    					<xf:group style="width:100px;" tagname="col"/>
+    					<xf:group style="width:150px;" tagname="col"/>
+    					<xf:group style="width:80px;" tagname="col"/>
+    					<xf:group style="" tagname="col"/>
+    				</xf:group>
+    				<xf:group class="" id="" style="" tagname="tr">
+    					<xf:group class="w2tb_th" style="" tagname="th">
+    						<w2:textbox class="" id="" label="민원구분" style=""/>
+    					</xf:group>
+    					<xf:group class="w2tb_td" style="" tagname="td">
+    						<xf:select1 allOption="" appearance="minimal" chooseOption="" class="" direction="auto" disabled="false"
+    							disabledClass="w2selectbox_disabled" id="cob_MinwonJeopsuJohoeJogeon_minwonFg" ref="data:dma_MinwonJeopsuJohoeJogeon.MINWON_FG"
+    							renderType="" style="" submenuSize="auto" mandatory="true"
+    							ev:onviewchange="scwin.cob_MinwonJeopsuJohoeJogeon_minwonFg_onviewchange" textAlign="left">
+    							<xf:choices>
+    								<xf:itemset nodeset="data:dlt_MinwonFg">
+    									<xf:label ref="GT_CD_NM1" />
+    									<xf:value ref="GT_CD" />
+    								</xf:itemset>
+    							</xf:choices>
+    						</xf:select1>
+    					</xf:group>
+    					<xf:group class="w2tb_th" style="" tagname="th">
+    						<w2:textbox class="" id="" label="접수번호" style=""/>
+    					</xf:group>
+    					<xf:group class="w2tb_td" id="" style="" tagname="td">
+
+    						<xf:group id="" style="" class="flex">
+    							<xf:group style="width:220px;" id="" class="searchbox wauto w170">
+    								
+    								
+    							<xf:input style="" id="mae_MinwonJeopsuJohoeJogeon_jeopsuNo" placeholder="____-____-_______" class="" displayFormat="####-####-#######" ref="data:dma_MinwonJeopsuJohoeJogeon.JEOPSU_NO" ev:onblur="scwin.mae_MinwonJeopsuJohoeJogeon_jeopsuNo_onblur" ev:onkeydown="scwin.mae_MinwonJeopsuJohoeJogeon_jeopsuNo_onkeydown" applyFormat="all" allowChar="A-Z0-9a-z" maxlength="-1" maskFormat="default" refSync="true" editType="select" ev:onviewchange="scwin.mae_MinwonJeopsuJohoeJogeon_jeopsuNo_onviewchange" userData3="ZZZZ-ZZZZ-ZZZZZZZ"/><xf:group class="btn cr3 icon sch" id="btn_MinwonJeopsuJohoeJogeon_SelectMinwonJeopsuNoPup" text="조회" style="" tagname="button" ev:onclick="scwin.btn_MinwonJeopsuJohoeJogeon_SelectMinwonJeopsuNoPup_onclick" /></xf:group>
+    							<xf:group class="btn cr3" id="btn_MinwonJeopsuJohoeJogeon_SIISJangaeJohoe" text="SIIS장애건조회" style="" tagname="button" ev:onclick="scwin.btn_MinwonJeopsuJohoeJogeon_SIISJangaeJohoe_onclick"/>
+    						</xf:group>
+    					</xf:group>
+    				</xf:group>
+    			</xf:group>
+    		</xf:group>
+    		<xf:group class="btn_schbox" id="" style="">
+    			<xf:group class="btn cr3 icon sch" id="btn_Johoe" text="조회" style="" tagname="button" ev:onclick="scwin.btn_Johoe_onclick"/>
+    		</xf:group>
+    	</xf:group>
+    	<!-- /search -->
+    	
+    	<!-- w프레임영역 PID div_import_1_qa-->
+    	<w2:wframe style="" id="div_import_1_q_qa" src=""/>
+    	<!-- // w프레임영역 -->
+    	<w2:udc_fixed_bottom style="" id="gyeoljaeBar"></w2:udc_fixed_bottom>
+    </body>
+</html>

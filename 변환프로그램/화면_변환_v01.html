@@ -1,0 +1,1480 @@
+<!--
+** 프로그램 설명
+** 개선 v01 : 라인단위 처리 -> v02 라인단위 처리시 일부 문제로 블록단위처리로 변경
+** 1. 엑셀파일로 dataset map/list 구분하여 데이터셋에 입력 (ex : ds_MinwonJeopsuJohoeJogeon	dma_MinwonJeopsuJohoeJogeon	dataset	map)
+** 2. 퍼블된 TOBE 소스에 각 컨포넌트에 ASIS 를 ID를 입력한다.
+** 3. ASIS 소스 전체를 AS-IS XML 소스에 입력  
+** 4. TOEB 퍼블 소스 전체를 TO-BE XML 소스에 입력  
+** 5. 변환버튼 클릭
+** 6. 생성 XML 소스에 소스가 생성됨
+** 7. 생성된 이벤트 등이 적합하지 않은 경우 적절히 수정 필요
+** 8. 컴포넌트별 이벤트, 변환 속성 추가시에 아래 내용 확인
+
+------------------------------------------------------------------------
+> 기능 추가시 아래 사항 확인 -------------------------------------------
+> 변환대상 컴포넌트
+> 각 컴포넌트별 속성 및 이벤트 변환 대상
+------------------------------------------------------------------------
+
+** 추후변경
+EDIT : onchange -> oneditkeyup
+
+trueValue, falseVAlue 는 소문자로 변경하지 않는다.
+trueValue는 요거 추가 필요
+<xf:choices>
+	<xf:item>
+		<xf:label><![CDATA[]]></xf:label>
+		<xf:value><![CDATA[Y]]></xf:value>
+	</xf:item>
+</xf:choices>
+
+array() -> Array()
+
+-----------------------------------------------------------------------
+setValue 오류 : 일부 getvalue 로 나옴
+blur ->  onviewchange 로 
+allowchar 
+edit datatype number
+
+메시지 변환 : 무조건 message로 하지 않는다.
+
+UnFilter -> clearFilter
+
+- confirm 코드 O
+	var conRtn = await com.mconfirm("MZZC002");
+	if (!conRtn.clickValue) { 
+		return;
+    }
+
+- confirm 코드 X
+	var conRtn = await com.confirm("삭제하시겠습니까?");
+	if (!conRtn.clickValue) {  
+		return;
+    }
+
+- alert 코드 O
+	var v_MsgArray = ["선택된 행"];
+	com.message("MZZA150", v_MsgArray); //case1
+	com.message("MZZA150"); //case2
+	
+- alert 코드 X
+	com.alert("선택된 행이 없습니다.");
+
+
+-->
+<html>
+    <head>
+        <title>마이플레폼 -> 웹스퀘어 Change</title>
+        <meta http-equiv="Conent-Type" content="text/html"; charset="utf-8" />
+        <script language="javascript">
+            let dataset_arr  = [];		// 동적생성
+            
+			// 변환 대상 컴포넌트
+			let comp_arr = ["Combo", "Edit", "Button", "MaskEdit", "CalendarEx", "checkbox", "Radio", "TextArea", "Grid", "Tab"];				
+			
+			// ASIS-TOEB 컴포넌트 매핑
+			let comp_mapp_arr = 
+				[{asis:"Combo"     , tobe:"xf:select1"}, 
+				 {asis:"Edit"      , tobe:"xf:input"}  , 
+				 {asis:"Button"    , tobe:"xf:group"}  ,   	//xf:group	tagname="button"	xf:group class="btn"
+				 {asis:"Button"    , tobe:"xf:trigger"},   	//xf:group	tagname="button"	xf:group class="btn"
+				 {asis:"MaskEdit"  , tobe:"xf:input"}  , 
+				 {asis:"CalendarEx", tobe:"w2:inputCalendar"}, 
+				 {asis:"checkbox"  , tobe:"xf:select"} , 
+				 {asis:"Radio"     , tobe:"xf:select1"},	// renderType="radiogroup"
+				 {asis:"TextArea"  , tobe:"xf:textarea"},
+				 {asis:"Grid"      , tobe:"w2:gridView"},
+				 {asis:"Tab"       , tobe:"w2:tabControl"},
+				 ];	
+			
+
+            // 전체 컨트롤 : 동적으로 생성
+            let component_control_arr = [];
+
+            // 데이터셋 ASIS-TOBE 속성 변경 대상
+            let dataset_control_arr =
+            [
+                {asis:"CanColumnChange", tobe:"ev:onbeforemodelchange"},
+                {asis:"OnColumnChanged", tobe:"ev:onmodelchange"},
+                {asis:"OnLoadCompleted", tobe:"ev:onsetdata"}
+            ];
+            
+            // 컨트롤명 변경
+            let change_control_arr = [];
+            
+            // DATASET SCRIPT 영역 ASIS-TOBE 변경 대상
+            let dataset_script_arr = [
+                {asis:'SetColumn[\\s\\t]*\\([\\s\\t\\"]*[0]*[\\s\\t\\"]*', tobe:"set("    , type:'map' },
+                {asis:'GetColumn[\\s\\t]*\\([\\s\\t\\"]*[0]*[\\s\\t\\"]*', tobe:"get("    , type:'map' },
+                {asis:"ClearData"                    , tobe:"setEmptyValue"         , type:'map' },
+                {asis:"AddRow"                       , tobe:"insertRow"             , type:'list'},
+                {asis:"ClearData"                    , tobe:"removeAll"             , type:'list'},
+                {asis:"GetColumn"                    , tobe:"getCellData"           , type:'list'},
+                {asis:"SetColumn"                    , tobe:"setCellData"           , type:'list'},
+                {asis:"rowcount"                     , tobe:"getRowCount()"         , type:'list'},
+                {asis:"row"                          , tobe:"getRowPosition"        , type:'list'},
+                {asis:"Filter"                       , tobe:"setColumnFilter"       , type:'list'},
+                {asis:"FindRow"                      , tobe:"getMatchedIndex"       , type:'list'},
+                {asis:"UnFilter"                     , tobe:"clearFilter"           , type:'list'},
+                {asis:"GetRowType"                   , tobe:"getRowStatus"          , type:'list'},
+                {asis:"GetRowCount"                  , tobe:"getRowCount"           , type:'list'}
+                
+            ];
+
+            // 전체 컨트롤 공통 속성 변경 대상
+            let component_control_attr_arr = [
+                {asis:"MaxLength"                    , tobe:"maxlength"             , type:'replace'},
+                {asis:"Enable"                       , tobe:"disabled"              , type:'replace'},
+                {asis:"Mask"                         , tobe:"displayFormat"         , type:'replace'},
+				{asis:"Readonly"                     , tobe:"readonly"              , type:'replace'},
+				{asis:"FalseValue"                   , tobe:"falseValue"            , type:'replace'},
+                {asis:"TrueValue"                    , tobe:"trueValue"             , type:'custom'},
+				{asis:"UserData"                     , tobe:"mandatory"             , type:'custom'},
+                {asis:"BindDataset"                  , tobe:"ref"                   , type:'custom'},
+                {asis:"InnerDataset"                 , tobe:"BindItemSet"           , type:'custom'},
+                {asis:"Number"                 		 , tobe:"dataType"              , type:'custom'}
+            ];
+
+            // 컴포넌트 스크립트 공통 적용
+            let common_control_script_arr = [
+                {asis:"SetFocus"                     , tobe:"focus"                 , type:'replace'},                
+                {asis:"Parent"                       , tobe:"$p.parent()"           , type:'areplace'},                
+                //{asis:"array"                        , tobe:"Array"                 , type:'replace'},
+                {asis:"value"                        , tobe:"setValue/getValue"     , type:'custom' },
+                {asis:"text"                         , tobe:"setValue/getValue"     , type:'custom' },
+                {asis:"enable"                       , tobe:"setDisabled"           , type:'custom' },
+                {asis:"index"                        , tobe:"setIndex/getIndex"     , type:'custom' },
+                {asis:"TabIndex"                     , tobe:"getSelectedTabIndex"   , type:'custom' },
+                {asis:"visible"                      , tobe:"hide/show"             , type:'custom' }
+            ];
+
+			// 컴포넌트 별로 변환되는 이벤트가 달라질수 있으므로 별도 적용 ===========================
+			// 콤보박스 이벤트 적용
+			combo_event_arr = [
+				{asis:"OnChanged"                    , tobe:"ev:onviewchange"          , type:'replace'}
+			];
+			
+			// 버튼 이벤트 적용
+			button_event_arr = [
+				{asis:"OnClick"                      , tobe:"ev:onclick"               , type:'replace'}
+			];
+
+			// EDIT 이벤트 적용 : OnChanged,OnCharChanged 둘다 있는 경우는?
+			edit_event_arr = [
+				{asis:"OnChanged"                    , tobe:"ev:onviewchange"         , type:'replace'},
+				{asis:"OnCharChanged"                , tobe:"ev:oneditkeyup"          , type:'replace'},
+				{asis:"CanChange"                    , tobe:"ev:onviewchange"         , type:'replace'},
+				{asis:"OnKeyDown"                    , tobe:"ev:onkeydown"            , type:'replace'}
+			];
+			
+			// MASKEDIT 이벤트 적용 : OnChanged,OnCharChanged 둘다 있는 경우는?
+			maskedit_event_arr = [
+				{asis:"OnChanged"                    , tobe:"ev:onviewchange"         , type:'replace'},
+				{asis:"OnCharChanged"                , tobe:"ev:oneditkeyup"          , type:'replace'},
+				{asis:"CanChange"                    , tobe:"ev:onviewchange"         , type:'replace'},
+				{asis:"OnKeyDown"                    , tobe:"ev:onkeydown"            , type:'replace'}
+			];			
+			
+			// 체크박스
+			checkbox_event_arr = [
+				{asis:"OnClick"                      , tobe:"ev:onviewchange"         , type:'replace'}
+			];						
+			
+			// 라디오버튼
+			radio_event_arr = [
+				{asis:"OnClick"                      , tobe:"ev:onviewchange"         , type:'replace'}
+			];
+			
+			// 칼렌다
+			calendarex_event_arr = [
+				{asis:"OnChanged"                    , tobe:"ev:onviewchange"         , type:'replace'}
+			];			
+			
+			// 그리드
+			grid_event_arr = [
+				{asis:"OnCellDBLClick"               , tobe:"ev:oncelldblclick"       , type:'replace'},
+				{asis:"OnCellClick"                  , tobe:"ev:oncellclick"          , type:'replace'},
+				{asis:"OnCellPosChanged"             , tobe:"ev:oncellindexchange"    , type:'replace'}
+			];
+			
+			
+			// 텝컨트롤
+			tab_event_arr = [
+				{asis:"tab1_OnChanging"              , tobe:"ev:onbeforeselect"       , type:'replace'},
+				{asis:"tab1_OnChanged"               , tobe:"ev:onchange"             , type:'replace'}
+			];			
+			
+			// 컴포넌트 별로 변환되는 이벤트가 달라질수 있으므로 별도 적용 ===========================
+			
+			// XML Parser, Serializer
+            let xml_parser_asis = new DOMParser();  // ASIS XML
+            let xml_doc_asis    = null;
+            let root_asis       = null;
+
+            let xml_parser_tobe = new DOMParser();  // TOBE & NEW XML
+            let xml_doc_tobe    = null;
+            let root_tobe       = null;
+
+            let xml_serializer  = new XMLSerializer();
+            let data_string     = "";
+            let all_data_string = "";
+
+            // 화면 변환
+            fn_websquare_change = function() {
+            	
+                if (document.getElementById("txt_asis").value == "") {
+                    alert("ASIS 소스를 입력하세요");
+                    document.getElementById("txt_asis").focus();
+                    return;
+                }
+            	
+                if (document.getElementById("txt_tobe").value == "") {
+                    alert("TOBE 소스를 입력하세요");
+                    document.getElementById("txt_tobe").focus();
+                    return;
+                }
+            	
+                dataset_arr  = [];      
+                change_control_arr =  [];          
+                data_string  = "";
+
+                // 데이터셋 arr 생성
+                fn_make_dataset_arr();
+
+                // xml parsing
+                var asis_text = document.getElementById("txt_asis").value;
+                xml_doc_asis  = xml_parser_asis.parseFromString(asis_text, "text/xml");
+                root_asis     = xml_doc_asis.getElementsByTagName("Form");
+
+                var tobe_text = document.getElementById("txt_tobe").value;
+                xml_doc_tobe  = xml_parser_tobe.parseFromString(tobe_text, "text/xml");
+                root_tobe     = xml_doc_tobe.getElementsByTagName("Form");
+
+                // 데이터셋 생성
+                fn_make_dataset();
+                
+                // 컨트롤 load
+                fn_make_control_load();
+                
+                // 스크립트 copy
+                fn_copy_script();
+
+                // 컨트롤별 replace 처리
+                fn_replace_tobe();
+                
+                // 컨트롤 속성 변경
+                fn_make_control_attr();
+                
+                // 컨트롤 이벤트 변경
+                fn_make_evnet_attr();                
+
+            }
+
+            // arr 생성
+            fn_make_dataset_arr = function() {
+
+                var control_text = document.getElementById("txt_control").value;
+                var control_arr  = control_text.split("\n");
+
+                for(var i=0; i<control_arr.length; i++) {
+                    var type_arr = control_arr[i].split("\t");
+                    if (type_arr.length == 0 || type_arr.length == 1) break;
+
+                    var type_json = {};
+                    for(var j=0; j<type_arr.length; j++) {
+                        if (type_arr[2] != "dataset"  && type_arr[2] != "combo" && type_arr[2] != "edit" && type_arr[2] != "checkbox" &&
+                            type_arr[2] != "calendar" && type_arr[2] != "radio" && type_arr[2] != "grid" && type_arr[2] != "control") {
+                            alert("컨트롤 타입이 정확하지 않습니다.[" + type_arr[2] +"]");
+                            return;
+                        }
+
+						if (type_arr[2] != "control") {
+	                        if (type_arr[2] == "dataset" && type_arr[3] != "map" & type_arr[3] != "list" ) {
+	                            alert("dataset 의 map 또는 list 를 정확히 입력하세요");
+	                            return;
+	                        }
+	                    }    
+
+                        type_json["asis"] = type_arr[0];
+                        type_json["tobe"] = type_arr[1];
+                        type_json["comp"] = type_arr[2];
+
+                        if (type_arr[2] == "dataset") {
+                            type_json["type"] = type_arr[3];
+                        }
+                    }
+                    console.log(type_json["comp"]+"_arr");
+                    eval(type_json["comp"]+"_arr").push(type_json);
+                    
+                    // 변경 컨트롤                    
+                    if (type_arr[2] == "control") {
+                		var change_control_json = {};    	
+                		change_control_json["asis"] = type_arr[0];
+                    	change_control_json["tobe"] = type_arr[1];
+                		
+                    	change_control_arr.push(change_control_json);
+                    }
+                }
+            }
+
+            // 데이터셋 생성
+            fn_make_dataset = function() {
+                all_data_string = "";
+                if (dataset_arr != null && dataset_arr.length > 0) {
+                    for (var i=0; i<dataset_arr.length; i++) {
+                        var comp_asis = fn_find_control(xml_doc_asis, "Dataset", dataset_arr[i].asis);
+
+                        if (comp_asis == null) {
+                            alert("dataset 을 찾을 수 없습니다.[" + dataset_arr[i].asis + "]");
+                            return;
+                        }
+
+                        // 데이터셋 변경
+                        data_string = "";
+                        fn_change_dataset(comp_asis, dataset_arr[i].type, dataset_arr[i].tobe);
+                    }
+
+                    // data_string
+                    var comp_tobe = xml_doc_tobe.getElementsByTagName("w2:dataCollection");
+                    comp_tobe[0].innerHTML = all_data_string;
+
+                    var new_text = xml_serializer.serializeToString(xml_doc_tobe);
+                    document.getElementById("txt_new").value = new_text;
+
+                }
+
+            }
+
+			// 컨트롤 load
+			fn_make_control_load  = function() {
+				
+				// 컴포넌트
+				component_control_arr = [];
+				for(var i=0; i<comp_arr.length; i++) {
+					var combo_asis = xml_doc_asis.getElementsByTagName(comp_arr[i]);
+				
+					var component_contorl_json;
+					if (combo_asis !=  null && combo_asis.length > 0) {
+						for(var j=0; j<combo_asis.length; j++) {
+							component_contorl_json = {};
+							component_contorl_json["control_nm"] = combo_asis[j].getAttribute("Id");
+							component_contorl_json["type"]       = comp_arr[i];
+							
+							component_control_arr.push(component_contorl_json);
+						}	
+					}
+				}	
+			}
+			
+			// 컨트롤 asis tobe 매핑 조회
+			fn_find_mapping_tobe = function(control_nm) {
+				
+				var revcomp_mapp_arr = [];
+				for (var i=0; i<comp_mapp_arr.length; i++) {
+					if (comp_mapp_arr[i].asis == control_nm) {
+						revcomp_mapp_arr.push(comp_mapp_arr[i].tobe);
+						//return comp_mapp_arr[i].tobe;
+					}
+				}
+				return revcomp_mapp_arr;
+			}
+			
+			// 데이터셋 tobe 조회
+			fn_find_dataset_tobe = function(dataset_nm) {
+				for (var i=0; i<dataset_arr.length; i++) {
+					if (dataset_arr[i].asis == dataset_nm) {
+						return dataset_arr[i].tobe;
+					}
+				}
+			}	
+			
+			// 컨트롤 속성 변경
+			fn_make_control_attr  = function() {			
+				var tobe_text = document.getElementById("txt_new").value;
+				xml_doc_tobe  = xml_parser_tobe.parseFromString(tobe_text, "text/xml");
+				
+				if (component_control_arr != null && component_control_arr.length >  0) {
+					for(var i=0; i<component_control_arr.length; i++) {
+						var control_type     = component_control_arr[i].type;
+						var control_nm       = component_control_arr[i].control_nm;
+						
+						var tobe_tag_nm_arr  = fn_find_mapping_tobe(control_type);						
+						if (tobe_tag_nm_arr != null && tobe_tag_nm_arr.length > 0) {
+						
+							for(var z=0; z<tobe_tag_nm_arr.length; z++) {									
+								var tobe_tag_nm  = tobe_tag_nm_arr[z];								
+								var comp_tobe    = fn_find_control(xml_doc_tobe, tobe_tag_nm , control_nm);
+								var comp_asis    = fn_find_control(xml_doc_asis, control_type, control_nm);
+								
+								if (comp_tobe != null && comp_asis != null) {
+									
+									// ex : {asis:"maxlength" , tobe:"maxlength" , type:'replace'},
+									for(var j=0; j<component_control_attr_arr.length; j++) {
+										
+										if (comp_asis.hasAttribute(component_control_attr_arr[j].asis)) {								
+											if (component_control_attr_arr[j].type == "replace") {
+												if (!comp_tobe.hasAttribute(component_control_attr_arr[j].tobe)) {
+													if (component_control_attr_arr[j].asis == "Enable") {
+														var val = comp_asis.getAttribute(component_control_attr_arr[j].asis).toLowerCase();
+														if (val == "true") {val = "false"; } else {val = "true";}		
+														comp_tobe.setAttribute(component_control_attr_arr[j].tobe, val);
+														
+													} else if (component_control_attr_arr[j].asis == "Mask") {
+														
+														var val = comp_asis.getAttribute(component_control_attr_arr[j].asis).toLowerCase();
+														if (val == "####-####-z9#####") {val = "####-####-#######"; }		
+														comp_tobe.setAttribute(component_control_attr_arr[j].tobe, val);
+													
+													} else if (component_control_attr_arr[j].asis == "FalseValue") {
+														// false value 는 소문자 변환 하지 않는다.
+														var val = comp_asis.getAttribute(component_control_attr_arr[j].asis);
+														comp_tobe.setAttribute(component_control_attr_arr[j].tobe, val);												
+													} else {
+														var val = comp_asis.getAttribute(component_control_attr_arr[j].asis).toLowerCase();
+														comp_tobe.setAttribute(component_control_attr_arr[j].tobe, val);
+													}
+													
+												}	
+											}
+										
+											if (component_control_attr_arr[j].type == "custom") {
+												
+												if (component_control_attr_arr[j].asis == "UserData") {
+													var val = comp_asis.getAttribute(component_control_attr_arr[j].asis).toLowerCase().trim();
+													if (val.indexOf("optional=required") >= 0) {	// 필수체크
+														comp_tobe.setAttribute(component_control_attr_arr[j].tobe, "true");
+													}
+												}
+												
+												if (component_control_attr_arr[j].asis == "BindDataset") {
+													var val = comp_asis.getAttribute(component_control_attr_arr[j].asis);
+													val = fn_find_dataset_tobe(val);
+													if (val != null && val != "") {
+														
+														if (component_control_arr[i].type == "Grid") {
+															comp_tobe.setAttribute("dataList", "data:"+ val);
+														}  else {
+															var val2 = comp_asis.getAttribute("Column");
+															comp_tobe.setAttribute(component_control_attr_arr[j].tobe, "data:"+ val + "." + val2);
+														}
+													}
+												}	
+												
+												if (component_control_attr_arr[j].asis == "Number") {
+													var val = comp_asis.getAttribute(component_control_attr_arr[j].asis);
+													val = fn_find_dataset_tobe(val);
+													if (val != null && val != "") {
+														if (val.toLowerCase() == "true") {
+															comp_tobe.setAttribute(component_control_attr_arr[j].tobe, "number");	
+														}
+													}
+												}											
+	                        	
+												if (component_control_attr_arr[j].asis == "InnerDataset") {
+													var val = comp_asis.getAttribute(component_control_attr_arr[j].asis);
+													val = fn_find_dataset_tobe(val);
+													if (val != null && val != "") {
+														var val2 = comp_asis.getAttribute("CodeColumn");
+														var val3 = comp_asis.getAttribute("DataColumn");
+														
+														if (val2 != null && val2 != "" && val3 != null && val3 != "") {
+															var attr_val = "<xf:choices>\n";
+															attr_val += "	<xf:itemset nodeset=\"data:"+val  +"\">\n"
+															attr_val += "		<xf:label ref=\""+ val3 +"\"></xf:label>\n"
+															attr_val += "		<xf:value ref=\""+ val2 +"\"></xf:value>\n"
+															attr_val += "	</xf:itemset>"
+															attr_val += "</xf:choices>";	
+															
+															comp_tobe.innerHTML = attr_val;
+														}
+													}
+												}
+												
+												
+												// check box true value
+												if (component_control_attr_arr[j].asis == "TrueValue") {
+													var val = comp_asis.getAttribute(component_control_attr_arr[j].asis);	
+													var attr_val = "<xf:choices>\n";
+													attr_val += "	<xf:item>\n"
+													attr_val += "		<xf:label><![CDATA[]]></xf:label>\n"
+													attr_val += "		<xf:value><![CDATA["+val+"]]></xf:value>\n"
+													attr_val += "	</xf:item>\n"
+													attr_val += "</xf:choices>";
+													
+													comp_tobe.innerHTML = attr_val;	
+												}
+											}
+										}		
+									}	
+									
+									// 그리드 속성 변경
+									if (control_type == "Grid") {
+										fn_make_control_grid_attr(comp_asis, comp_tobe);
+									}	
+								}	
+							}	     
+						}	
+					}	// end of for(var i=0; i<component_control_arr.length; i++) {
+				}  // end of if (component_control_arr != null && component_control_arr.length >  0) {
+				
+				var new_text = xml_serializer.serializeToString(xml_doc_tobe);
+                document.getElementById("txt_new").value = new_text;
+			}
+			
+			// 그리드 속성 변경
+			fn_make_control_grid_attr = function(comp_asis, comp_tobe) {
+				// grid body
+				var body_asis = comp_asis.getElementsByTagName("body")[0];
+				var body_tobe = comp_tobe.getElementsByTagName("w2:gBody")[0].getElementsByTagName("w2:row")[0];
+				
+				// grid setting
+				for(var i=0; i<body_asis.children.length; i++) {
+					
+					// asis 그리드 컬럼
+					var colid = body_asis.children[i].getAttribute("colid");
+					
+					for(var j=0; j<body_tobe.children.length; j++) {
+					
+						var id = body_tobe.children[j].getAttribute("id");
+						
+						if (colid == id) {										
+							// align
+							var align = body_asis.children[i].getAttribute("align");			
+							if (align != null && align != "") {
+								body_tobe.children[j].setAttribute("textAlign", align.toLowerCase());
+							}
+							
+							// mask
+							var mask = body_asis.children[i].getAttribute("Mask");						
+							if (mask != null && mask != "") {
+								body_tobe.children[j].setAttribute("displayFormat", mask.toLowerCase());
+							}
+							
+							// maxlength
+							var limit = body_asis.children[i].getAttribute("limit");
+							if (limit != null && limit != "") {
+								body_tobe.children[j].setAttribute("maxLength", limit.toLowerCase());
+							}			
+							
+							// display
+							var display = body_asis.children[i].getAttribute("display");
+							
+							if (display != null && display != "") {
+								
+								if (display == "combo") {
+									body_tobe.children[i].setAttribute("inputType", "select");
+									
+									var combo_val  = body_asis.children[i].getAttribute("combodataset");
+									var combo_val2 = body_asis.children[i].getAttribute("combocol");
+									var combo_val3 = body_asis.children[i].getAttribute("combotext");
+									/*
+									<w2:choices>
+    									<w2:itemset nodeset="data:dlt_SayongYn">
+    										<w2:label ref="CD_NM"></w2:label>
+    										<w2:value ref="CD_NM"></w2:value>
+    									</w2:itemset>
+    								</w2:choices>
+									*/
+									
+									
+									if (combo_val != null && combo_val != "" && combo_val2 != null && combo_val2 != "" && combo_val3 != null && combo_val3 != "") {
+										
+										combo_val = fn_find_dataset_tobe(combo_val);
+										
+										var attr_val = "<w2:choices>\n";
+										attr_val += "	<w2:itemset nodeset=\"data:"+combo_val  +"\">\n"
+										attr_val += "		<w2:label ref=\""+ combo_val3 +"\"></w2:label>\n"
+										attr_val += "		<w2:value ref=\""+ combo_val2 +"\"></w2:value>\n"
+										attr_val += "	</w2:itemset>"
+										attr_val += "</w2:choices>";	
+										
+										body_tobe.children[j].innerHTML = attr_val;
+									}			
+									
+									
+								} else if (display == "checkbox") {
+									body_tobe.children[j].setAttribute("inputType", "checkbox");
+								} else if (display == "button") {
+									body_tobe.children[j].setAttribute("inputType", "button");
+								} else if (display == "image") {
+									body_tobe.children[j].setAttribute("inputType", "image");
+								} else if (display == "number") {
+									body_tobe.children[j].setAttribute("dataType" , "number");
+								}	
+							}			
+							
+							//Expr
+						}
+					}
+				}
+			}	
+			
+			
+			// 컨트롤 이벤트 변경
+			fn_make_evnet_attr = function() {
+				var tobe_text = document.getElementById("txt_new").value;
+				xml_doc_tobe  = xml_parser_tobe.parseFromString(tobe_text, "text/xml");
+				
+				if (component_control_arr != null && component_control_arr.length >  0) {
+					// ex : {control_nm:'cob_MinwonJeopsuJohoeJogeon_minwonFg', type:'Combo'}
+					var replace_function_arr = [];
+					for(var i=0; i<component_control_arr.length; i++) {
+						
+						var comp_event_arr;
+						try {
+							comp_event_arr = eval(component_control_arr[i].type.toLowerCase()+"_event_arr");
+						} catch(err) {
+							comp_event_arr = null;
+						}
+						
+						if (comp_event_arr != null && comp_event_arr != undefined) {
+							
+							var control_type = component_control_arr[i].type;
+							var control_nm   = component_control_arr[i].control_nm;
+							
+							var tobe_tag_nm_arr  = fn_find_mapping_tobe(control_type);
+							if (tobe_tag_nm_arr != null && tobe_tag_nm_arr.length > 0) {
+						
+								for(var z=0; z<tobe_tag_nm_arr.length; z++) {									
+									var tobe_tag_nm  = tobe_tag_nm_arr[z];				
+							
+									var comp_tobe    = fn_find_control(xml_doc_tobe, tobe_tag_nm , control_nm);
+									var comp_asis    = fn_find_control(xml_doc_asis, control_type, control_nm);
+									
+									if (comp_tobe == null || comp_tobe == undefined || comp_asis == null || comp_asis == undefined) {
+										continue;	
+									}
+									
+									for(var j=0; j<comp_event_arr.length; j++) {								
+										if (comp_asis.hasAttribute(comp_event_arr[j].asis)) {
+											if (comp_event_arr[j].type == "replace") {		
+												if (!comp_tobe.hasAttribute(comp_event_arr[j].tobe)) {
+		                                            // 속성 세팅
+		                                            
+		                                            var regex_atttr = new RegExp(comp_event_arr[j].asis, 'i');
+		                                            
+		                                            comp_tobe.setAttribute(comp_event_arr[j].tobe, "scwin."+comp_asis.getAttribute(comp_event_arr[j].asis).replace(regex_atttr, comp_event_arr[j].tobe).replace("ev:", ""));
+		
+		                                            var function_json = {};
+		                                            function_json["asis"] = comp_asis.getAttribute(comp_event_arr[j].asis);
+		                                            function_json["tobe"] = comp_asis.getAttribute(comp_event_arr[j].asis).replace(regex_atttr, comp_event_arr[j].tobe.replace("ev:", ""));
+		
+		                                            replace_function_arr.push(function_json);
+		                                        }
+											}
+										}
+									}
+								}	
+							}		
+						}		
+					}	
+					var new_text = xml_serializer.serializeToString(xml_doc_tobe);
+                    document.getElementById("txt_new").value = new_text;					
+				}
+				
+                var tobe_text = document.getElementById("txt_new").value;
+                var tobe_arr  = tobe_text.split("\n");
+
+                var script_start = tobe_arr.findIndex(function(text){return text.includes("<script lazy=\"false\" type=\"text\/javascript\"\>");});
+                var script_end   = tobe_arr.findIndex(function(text){return text.includes("\]\]><\/script>");});
+
+                var script_arr   = tobe_arr.slice(script_start+1, script_end);
+                var script_text  = script_arr.join("\n");
+
+                if (replace_function_arr != null && replace_function_arr.length > 0) {
+                    for (var i=0; i<replace_function_arr.length; i++) {
+
+                        var regex_function = new RegExp('(\\b'+replace_function_arr[i].asis+'\\b)', 'g');
+                        script_text = script_text.replace(regex_function, replace_function_arr[i].tobe);
+                    }
+                }				
+                
+                tobe_arr.splice(script_start+1, script_end-(script_start)-1, script_text);
+                document.getElementById("txt_new").value = tobe_arr.join("\n");
+			}
+
+            // 컨트롤 확인
+            fn_find_control = function(xml_doc, tagName, id) {
+                let components = xml_doc.getElementsByTagName(tagName);
+
+                for(component of components) {
+                    if (component.getAttribute("Id") == id || component.getAttribute("id") == id) {
+                        return component;
+                    }
+                }
+            }
+
+            // 데이터셋 생성
+            var fn_change_dataset = function(dataset, type, new_id) {
+                if (dataset.hasChildNodes()) {
+                    var data_id = dataset.getAttribute("Id").substring(3);
+
+                    if (type == "map") {
+                        data_string += "\n              <w2:dataMap baseNode=\"map\" id=\""+new_id+"\">\n";
+                    } else {
+                        data_string += "\n              <w2:dataList baseNode=\"list\" repeatNode=\"map\" id=\""+new_id+"\" saveRemovedData=\"true\">\n";
+                    }
+
+                    // 레코드 존재여부
+                    var record_chk = false;
+                    if (dataset.getInnerHTML().indexOf("record") >= 0) {
+                        record_chk = true;
+                    }
+
+                    // 데이터셋 스트링 생성
+                    fn_make_datastring(dataset.children[0], type, record_chk);
+
+                    if (dataset.getInnerHTML().indexOf("record") >= 0) {
+                        record_chk = true;
+                        var row_arr = data_string.split("\n");
+                        row_arr.splice(-1);
+
+                        var record_start = row_arr.findIndex(function(txt) {return txt.includes("               <w2:row>");});
+                        row_arr[record_start] = (type=="map"?"              </w2:keyInfo>\n":"                  </w2:columnInfo>\n") + "                  <w2:data use=\"true\">\n                     <w2:row>";
+                        row_arr.push("                  </w2:data>\n");
+
+                        data_string = row_arr.join("\n");
+                    }
+
+                    if (type == "map") {
+                        data_string += "                </w2:dataMap>";
+                    } else {
+                        data_string += "                </w2:dataList>";
+                    }
+
+                    all_data_string += data_string;
+                }
+
+                console.log("--------------------------------");
+                console.log(data_string);
+                console.log("--------------------------------");
+            }
+
+            // 데이터셋 스트링 생성
+            var fn_make_datastring = function(dataset, type, record_chk) {
+
+                if (dataset.tagName == "Contents") {
+
+                    if (type == "map") {
+                        data_string += "                    <w2:keyInfo>\n";
+                    } else {
+                        data_string += "                    <w2:columnInfo>\n";
+                    }
+
+                    for(col of dataset.children) {
+                        fn_make_datastring(col, type, record_chk);
+                    }
+
+                    if (!record_chk) {
+                        if (type == "map") {
+                            data_string += "                    </w2:keyInfo>\n";
+                        } else {
+                            data_string += "                    </w2:columnInfo>\n";
+                        }
+                    }
+                }
+
+                if (dataset.tagName == "colinfo") {
+                    var tagId = dataset.getAttribute("id");
+                    if (type == "map") {
+                        data_string += "                        <w2:key id=\"" + tagId + "\" name=\"" + tagId + "\" dataType=\"text\"></w2:key>\n";
+                    } else {
+                        data_string += "                        <w2:column id=\"" + tagId + "\" name=\"" + tagId + "\" dataType=\"text\"></w2:column>\n";
+                    }
+                }
+
+                // asis 는 record 가 여러건이다. -> 시작과 끝만 data 를 붙여야 한다. 반복은 row로
+                if (dataset.tagName == "record") {
+                    data_string += "                        <w2:row>\n";
+
+                    for(record of dataset.children) {
+                        fn_make_datastring(record, type, record_chk);
+                    }
+
+                    data_string += "                        </w2:row>\n";
+                }
+
+                if (dataset.parentNode.tagName == "record") {
+                    var tagName  = dataset.tagName;
+                    var tagValue = dataset.textContent;
+                    data_string += "                            <" + tagName +"><![CDATA[" + tagValue + "]]></"+ tagName +">\n";
+                }
+            }
+
+            // 스크립트 copy
+            fn_copy_script = function() {
+
+                var asis_text = document.getElementById("txt_asis").value;
+                var asis_arr  = asis_text.split("\n");
+
+                var script_start = asis_arr.findIndex(function(text){return text.includes("<Script><![CDATA\[");});
+                var script_end   = asis_arr.findIndex(function(text){return text.includes("\]\]><\/Script>");});
+
+                var script_text  = asis_arr.slice(script_start, script_end).join("\n");
+                script_text  = script_text.substring(script_text.indexOf("<Script><![CDATA\[") + ("<Script><![CDATA\[").length);
+                console.log(script_text);
+
+
+                var tobe_text = document.getElementById("txt_new").value;
+                var tobe_arr  = tobe_text.split("\n");
+
+                script_start = tobe_arr.findIndex(function(text){return text.includes("<script lazy=\"false\" type=\"text\/javascript\"\>");});
+
+                tobe_arr[script_start+1] = script_text + "\n" + tobe_arr[script_start+1];
+                document.getElementById("txt_new").value = tobe_arr.join("\n");
+            }
+
+            // tobe 변경
+            fn_replace_tobe = function() {
+                // var 선언 전역변수
+                fn_replace_var_tobe();
+
+                // com. 붙이면 되는 공통함수
+                fn_replace_com_tobe();
+
+                // function style 변경
+                fn_replace_function_tobe();
+
+                // 데이터셋 변경
+                fn_replace_dataset_tobe();
+
+                // 컴포넌트 공통
+                fn_replace_common_control_tobe();
+                
+                // 명칭 변경 컴포넌트
+            	fn_replace_change_name_control_tobe();
+                
+            }
+
+            // var 선언 전역변수
+            fn_replace_var_tobe = function() {
+
+                var tobe_text = document.getElementById("txt_new").value;
+                var tobe_arr  = tobe_text.split("\n");
+
+                var script_start = tobe_arr.findIndex(function(text){return text.includes("<script lazy=\"false\" type=\"text\/javascript\"\>");});
+                var script_end   = tobe_arr.findIndex(function(text){return text.includes("\]\]><\/script>");});
+
+                var script_arr   = tobe_arr.slice(script_start+1, script_end);
+                var script_text  = script_arr.join("\n");
+
+                // funtion 만나기 전까지만 scwin 으로 처리
+                // var replace 처리
+                // 전역변수 처리. = 나 ; 만나기 전까지
+                for(var i=0;i<script_arr.length; i++) {
+
+                    if (script_arr[i].indexOf("function") >= 0)  {
+                        break;
+                    }
+
+                    if (script_arr[i].search(/\bvar\b/ig) >= 0) {
+                        var match_arr = script_arr[i].match(/\bvar\b/ig);
+
+                        var idx = 0;
+                        for(var j=0;j<match_arr.length;j++) {
+                            // 온전한 단어 추출  ( = 나 ;전까지 추출후 trim 처리한다.)
+                            var line_text = script_arr[i].substring(idx);
+
+                            idx = line_text.search(/[\;]/g)+1;
+                            var word = line_text.substring(line_text.search(/\bvar\b/ig)+3, line_text.search(/[\;\=]/g));
+                            word = word.trim().replace("\t", "");  // 온전한 단어
+
+
+                            var regex_line = new RegExp('var[\\s\\t]\\b'+word+'\\b', 'g');
+                            var regex_word = new RegExp('\\b'+word+'\\b', 'g');
+
+                            // 단어 변경
+                            script_text = script_text.replace(regex_line, word);
+
+                            // 단어 변경
+                            script_text = script_text.replace(regex_word, "scwin."+word);
+                        }
+                    }
+                }
+
+                tobe_arr.splice(script_start+1, script_end-(script_start)-1, script_text);
+                document.getElementById("txt_new").value = tobe_arr.join("\n");
+            }
+
+            // com. 붙이면 되는 공통함수 (gfn으로 시작하는 단어는 com 을 붙인다.)
+            fn_replace_com_tobe = function() {
+
+                var tobe_text = document.getElementById("txt_new").value;
+                var tobe_arr  = tobe_text.split("\n");
+
+                var script_start = tobe_arr.findIndex(function(text){return text.includes("<script lazy=\"false\" type=\"text\/javascript\"\>");});
+                var script_end   = tobe_arr.findIndex(function(text){return text.includes("\]\]><\/script>");});
+
+                var script_arr   = tobe_arr.slice(script_start+1, script_end);
+                var script_text  = script_arr.join("\n");
+
+                for(var i=0;i<script_arr.length; i++) {
+                	// 정규식 수정 필요
+                    var gfn_match_arr  = script_arr[i].match(/(^com.)*(gfn_){1}[\w]{1,}[\\st]{0,}/gi); // function 매치 조회. 사용자 있는 경우 포함
+                    //var gfn_match_arr  = script_arr[i].match(/([^.]gfn_){1}[\w]{1,}[\\st]{0,}/gi); // function 매치 조회. 사용자 있는 경우 포함
+
+                    if (gfn_match_arr != null && gfn_match_arr.length > 0)  {
+
+                        var n_match_arr = gfn_match_arr.filter((ele, iidx) => {
+                            return gfn_match_arr.indexOf(ele) === iidx;
+                        });
+
+                        for(var j=0;j<n_match_arr.length; j++) {
+                            var regex_word = new RegExp('\\b'+n_match_arr[j].trim()+'\\b', 'g');
+							if (n_match_arr[j].trim().toLowerCase() == "gfn_isnull") n_match_arr[j] =  "gfn_IsNull";
+							//if (n_match_arr[j].trim().toLowerCase() == "gfn_alert") n_match_arr[j]  =  "alert";
+							//if (n_match_arr[j].trim().toLowerCase() == "gfn_msgalert") n_match_arr[j] = "message";
+							
+							
+                            script_arr[i] = script_arr[i].replace(regex_word, 'com.' + n_match_arr[j].trim());
+                        }
+                    }
+                    
+                    // ==================================================================================================
+                    // 마이플랫폼 내장함수 com 으로 변경(좀더 조사 필요)
+                    // ==================================================================================================
+			        var com_match_arr  = script_arr[i].match(/[^.]\bsubstr\b|[^.]\btrim\b|[^.]\blength\b|[^.]\btoNumber\b|[^.]\bParseFloat\b|[^.]\baddDate\b|[^.]\bToInteger\b|[^.]\bReplace\b|[^.]\bIndexOf\b|[^.]\bsplit\b|[^.]\baddMonth\b/gi);  
+                    
+                    if (com_match_arr != null && com_match_arr.length > 0)  {
+                    	
+                    	// 중복제거
+                    	var n_match_arr = com_match_arr.filter((ele, iidx) => {
+                            return com_match_arr.indexOf(ele) === iidx;
+                        });
+                    	
+                    	for(var j=0; j<n_match_arr.length;j++) {                    		
+                    		if (n_match_arr[j].search(/[^.]\bParseFloat\b/gi) >= 0) {
+                    			script_arr[i] = script_arr[i].replace(n_match_arr[j], n_match_arr[j].substring(0, 1) + 'parseFloat');
+                    		} else if (n_match_arr[j].search(/[^.]\bToInteger\b/gi) >= 0) {
+                    			script_arr[i] = script_arr[i].replace(n_match_arr[j], n_match_arr[j].substring(0, 1) + 'parseInt');
+                    		} else if (n_match_arr[j].search(/[^.]\bIndexOf\b/gi) >= 0) {
+                    			script_arr[i] = script_arr[i].replace(n_match_arr[j], n_match_arr[j].substring(0, 1) + 'com.indexOf');	
+                    		} else if (n_match_arr[j].search(/[^.]\bReplace\b/gi) >= 0) {
+                    			script_arr[i] = script_arr[i].replace(n_match_arr[j], n_match_arr[j].substring(0, 1) + 'com.' + n_match_arr[j].substring(1, n_match_arr[j].length).toLowerCase());	
+                    		} else {                    		
+                    			script_arr[i] = script_arr[i].replace(n_match_arr[j], n_match_arr[j].substring(0, 1) + 'com.' + n_match_arr[j].substring(1, n_match_arr[j].length));
+                    		}	
+                    	}                    	
+                    }
+                    
+                    var com_match_arr  = script_arr[i].match(/\barray\b/gi); 
+                    if (com_match_arr != null && com_match_arr.length > 0)  {
+                    	script_arr[i] = script_arr[i].replace(/\barray\b/gi, "Array");
+                    }	 
+                    
+                }
+
+                tobe_arr.splice(script_start+1, script_end-(script_start)-1, script_arr.join("\n"));
+                document.getElementById("txt_new").value = tobe_arr.join("\n");
+            }
+
+            // functon style 변경
+            fn_replace_function_tobe = function() {
+
+                var tobe_text = document.getElementById("txt_new").value;
+                var tobe_arr  = tobe_text.split("\n");
+
+                var script_start = tobe_arr.findIndex(function(text){return text.includes("<script lazy=\"false\" type=\"text\/javascript\"\>");});
+                var script_end   = tobe_arr.findIndex(function(text){return text.includes("\]\]><\/script>");});
+
+                var script_arr   = tobe_arr.slice(script_start+1, script_end);
+                var script_text  = script_arr.join("\n");
+
+                for(var i=0;i<script_arr.length; i++) {
+
+                    // 수정해야 한다. 호출하는 곳이 안먹는다.
+                    if (script_arr[i].search(/[^.]*(function){1}/) >= 0)  {
+
+                        var chk_comm_txt = script_arr.slice(0, i).join("\n");
+
+                        // 여러줄 주석안에 있는 함수는 제외
+                        if (chk_comm_txt.lastIndexOf("/*") > chk_comm_txt.lastIndexOf("*/"))  {
+                            continue;
+                        }
+
+                        // 한줄 주석이 function 앞에 있으면 pass
+                        if (script_arr[i].search(/\/\//) >= 0  && (script_arr[i].search(/\/\//) < script_arr[i].indexOf("function"))){
+                            continue;
+                        }
+
+                        // 여러줄 주석이 시작이 function 앞에 있으면 pass
+                        if (script_arr[i].search(/\/\*/) >= 0 && (script_arr[i].search(/\/\*/) < script_arr[i].indexOf("function"))){
+                            continue;
+                        }
+
+                        // 이미 변경된건 pass
+                        if (script_arr[i].indexOf("scwin.") >= 0){
+                            continue;
+                        }
+
+                        var match_text   = script_arr[i].substring(script_arr[i].indexOf('function')+'function'.length, script_arr[i].indexOf("(")).trim().replaceAll('\t', '');
+                        if (match_text != null && match_text != "") {
+                            var replace_text = 'scwin.' + match_text  + ' = function' + script_arr[i].substring(script_arr[i].indexOf("("));
+                            script_arr[i] = script_arr[i].replace(script_arr[i], replace_text);
+
+                            for(var j=0;j<script_arr.length; j++) {
+                                if (i != j && script_arr[j].search(/function/) < 0)  {
+                                    // 가끔 대소문자 틀린게 존재
+                                    
+                                    try {
+										var regex_word     = new RegExp('(\\b'+match_text+'\\b)', 'gi');
+	                                    var regex_word_not = new RegExp('('+'scwin.'+match_text+')', 'gi');
+	
+	                                    if (script_arr[j].search(regex_word) >=  0  && script_arr[j].search(regex_word_not) < 0) {
+	                                        script_arr[j] = script_arr[j].replace(regex_word, 'scwin.' + match_text);
+	                                    }
+										
+									} catch(err) {
+										console.log("script_arr[j] : " + script_arr[j]);
+										console.log("replace_text : " + replace_text);
+									}
+                                    
+                                    
+                                }
+                            }
+                        }
+                    }
+                    
+                    /*
+                    --데이터 셋과 겹친다.
+                    if (script_arr[i].search(/[\w\d]+(_OnLoadCompleted)/gi) > 0) {
+                    	script_arr[i] = script_arr[i].replace(/[\w\d]+(_OnLoadCompleted)/gi, "onpageload");
+                    }
+                    
+                    if (script_arr[i].search(/[\w\d]+(_OnUnloadCompleted)/gi) > 0) {
+                    	script_arr[i] = script_arr[i].replace(/[\w\d]+(_OnUnloadCompleted)/gi, "onpageunload");
+                    } 
+                    */
+                }
+
+                //tobe_arr.splice(script_start+1, script_end-(script_start)-1, script_text);
+                tobe_arr.splice(script_start+1, script_end-(script_start)-1, script_arr.join("\n"));
+                document.getElementById("txt_new").value = tobe_arr.join("\n");
+            }
+
+            // 데이터셋 변경
+            fn_replace_dataset_tobe = function() {
+                var tobe_text = document.getElementById("txt_new").value;
+                xml_doc_tobe  = xml_parser_tobe.parseFromString(tobe_text, "text/xml");
+
+                var replace_function_arr = [];
+                if (dataset_arr != null && dataset_arr.length > 0) {
+                    for (var i=0; i<dataset_arr.length; i++) {
+                        var comp_asis = fn_find_control(xml_doc_asis, "Dataset", dataset_arr[i].asis);
+
+                        if (comp_asis == null) {
+                            alert("dataset 을 찾을 수 없습니다.[" + dataset_arr[i].asis + "]");
+                            return;
+                        }
+
+                        var tobe_data_tag = "";
+                        if (dataset_arr[i].type == "map") {
+                            tobe_data_tag = "w2:dataMap";
+                        } else {
+                            tobe_data_tag = "w2:dataList";
+                        }
+
+                        var comp_tobe = fn_find_control(xml_doc_tobe, tobe_data_tag, dataset_arr[i].tobe);
+
+                        // asis 데이터셋 속성을 읽는다.
+                        for (attribute of comp_asis.getAttributeNames()) {
+
+                            if (dataset_control_arr != null && dataset_control_arr.length > 0) {
+
+                                for (var j=0; j<dataset_control_arr.length; j++) {
+
+
+                                    if (dataset_control_arr[j].asis == attribute) {
+
+                                        // 일치하는 속성이 있으면 바꾼다.
+                                        if (!comp_tobe.hasAttribute(dataset_control_arr[j].tobe)) {
+
+                                            // 속성 세팅
+                                            //comp_tobe.setAttribute(dataset_control_arr[j].tobe, comp_asis.getAttribute(dataset_control_arr[j].asis));
+                                            comp_tobe.setAttribute(dataset_control_arr[j].tobe, "scwin."+comp_asis.getAttribute(dataset_control_arr[j].asis).replace(dataset_control_arr[j].asis, dataset_control_arr[j].tobe).replace(dataset_arr[i].asis, dataset_arr[i].tobe).replace("ev:", ""));                                            
+
+                                            var function_json = {};
+                                            function_json["asis"] = comp_asis.getAttribute(dataset_control_arr[j].asis);
+                                            function_json["tobe"] = comp_asis.getAttribute(dataset_control_arr[j].asis).replace(dataset_control_arr[j].asis, dataset_control_arr[j].tobe).replace(dataset_arr[i].asis, dataset_arr[i].tobe).replace("ev:", "");
+
+                                            replace_function_arr.push(function_json);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    var new_text = xml_serializer.serializeToString(xml_doc_tobe);
+                    document.getElementById("txt_new").value = new_text;
+                }
+
+                // 바뀐 이벤트 변경
+                var tobe_text = document.getElementById("txt_new").value;
+                var tobe_arr  = tobe_text.split("\n");
+
+                var script_start = tobe_arr.findIndex(function(text){return text.includes("<script lazy=\"false\" type=\"text\/javascript\"\>");});
+                var script_end   = tobe_arr.findIndex(function(text){return text.includes("\]\]><\/script>");});
+
+                var script_arr   = tobe_arr.slice(script_start+1, script_end);
+                var script_text  = script_arr.join("\n");
+
+                if (replace_function_arr != null && replace_function_arr.length > 0) {
+                    for (var i=0; i<replace_function_arr.length; i++) {
+
+                        var regex_function = new RegExp('(\\b'+replace_function_arr[i].asis+'\\b)', 'g');
+                        script_text = script_text.replace(regex_function, replace_function_arr[i].tobe);
+                    }
+                }
+
+                // 스크립트 변경
+                if (dataset_arr != null && dataset_arr.length > 0) {
+                    // 속성별 스크립트 데이터셋
+                    for (var i=0; i<dataset_arr.length; i++) {
+                        // 데이터셋 스크립트 변경 배열
+                        if (dataset_script_arr != null && dataset_script_arr.length > 0) {
+                            for (var j=0; j<dataset_script_arr.length; j++) {
+                                //  같은 타입에 대해서만 처리
+                                if (dataset_arr[i].type == dataset_script_arr[j].type) {
+
+                                    var regex_function;
+                                    if (dataset_script_arr[j].type == "map" && (dataset_script_arr[j].tobe == "set(" || dataset_script_arr[j].tobe == "get(")) {
+                                        // 콤마가 정규식 그룹에 안묶여 예외처리(정확한 단어에서 제외됨
+                                        regex_function = new RegExp('(\\b'+dataset_arr[i].asis +'.'+ dataset_script_arr[j].asis +'\\b)[\\s\\t]*[\\,]+[\\s\\t]*', 'gi');
+                                    } else {
+                                        regex_function = new RegExp('(\\b'+dataset_arr[i].asis +'.'+ dataset_script_arr[j].asis +'\\b)', 'gi');
+                                    }
+                                    script_text = script_text.replace(regex_function, dataset_arr[i].tobe +'.'+ dataset_script_arr[j].tobe);
+                                }
+                            }
+                        }
+
+                        // asis-tobe 스크립트 변경 대상
+                        regex_function = new RegExp('(\\b'+dataset_arr[i].asis +'\\b)', 'g');
+                        script_text = script_text.replace(regex_function, dataset_arr[i].tobe);
+                    }
+                }
+
+                tobe_arr.splice(script_start+1, script_end-(script_start)-1, script_text);
+                document.getElementById("txt_new").value = tobe_arr.join("\n");
+            }
+
+            // 공통 컴포넌드 전환
+            fn_replace_common_control_tobe = function() {
+
+                var tobe_text = document.getElementById("txt_new").value;
+                var tobe_arr  = tobe_text.split("\n");
+
+                var script_start = tobe_arr.findIndex(function(text){return text.includes("<script lazy=\"false\" type=\"text\/javascript\"\>");});
+                var script_end   = tobe_arr.findIndex(function(text){return text.includes("\]\]><\/script>");});
+
+                var script_arr   = tobe_arr.slice(script_start+1, script_end);
+                var script_text  = script_arr.join("\n");
+
+				//
+				for (var i=0; i<script_arr.length; i++) {					
+					if (script_arr[i].indexOf("#include") >= 0) {
+						script_arr[i] = "//" + script_arr[i];
+					}					
+				}	
+
+                if (common_control_script_arr != null && common_control_script_arr.length > 0) {
+                    // 속성별 스크립트 데이터셋
+                    for (var i=0; i<common_control_script_arr.length; i++) {
+                        // 데이터셋 스크립트 변경 배열
+                        if (script_arr != null && script_arr.length > 0) {
+                            for (var j=0; j<script_arr.length; j++) {
+
+                                var regex_function = new RegExp('[\\.](\\b'+common_control_script_arr[i].asis+'\\b)', 'ig');
+                                
+                                if (common_control_script_arr[i].type == "areplace") {
+                                	regex_function = new RegExp('(\\b'+common_control_script_arr[i].asis+'\\b)', 'ig');
+                                }
+
+                                if (script_arr[j].search(regex_function) >= 0) {
+                                    // replace 가능
+                                    if (common_control_script_arr[i].type == "replace") {
+                                        script_arr[j] = script_arr[j].replace(regex_function, "."+common_control_script_arr[i].tobe);                                        
+                                    }
+                                    if (common_control_script_arr[i].type == "areplace") {
+                                        script_arr[j] = script_arr[j].replace(regex_function, common_control_script_arr[i].tobe);
+                                    }                                    
+
+                                    // 별도 처리 필요
+                                    if (common_control_script_arr[i].type == "custom") {
+
+                                        // value, text 처리
+                                        var regex_function2 = new RegExp('[\\w\\_]+[\\.]{1}(\\b'+common_control_script_arr[i].asis+'\\b)[\\s\\t]*[\\=]{1}[\\s\\t]*[\\"|\\w\\_]*[\\s\\t]*[\\"|\\w\\_]*[\\;]{1}', 'gi');
+
+                                        if (common_control_script_arr[i].asis == "value" || common_control_script_arr[i].asis == "text" ||  common_control_script_arr[i].asis == "TabIndex") {
+                                            if (script_arr[j].search(regex_function2) >= 0) {
+                                                var match_arr = script_arr[j].match(regex_function2);
+                                                if (match_arr != null && match_arr.length > 0) {
+                                                    for(var k=0; k<match_arr.length; k++) {
+                                                        var control_val  = match_arr[k].substring(match_arr[k].indexOf("=")+1, match_arr[k].length-1).trim();
+                                                        var control_text = match_arr[k].substring(0, match_arr[k].indexOf("."));
+                                                        
+                                                        if (common_control_script_arr[i].asis == "value" || common_control_script_arr[i].asis == "text") {
+                                                        	script_arr[j] = script_arr[j].replace(match_arr[k], control_text +'.setValue('+control_val+');');
+                                                        } else {
+                                                        	script_arr[j] = script_arr[j].replace(match_arr[k], control_text +'.setSelectedTabIndex('+control_val+');');	
+                                                        }	
+                                                        
+                                                    }
+                                                }
+                                            } else {
+                                            	var regex_function3 = new RegExp('[\\w\\_]+[\\.]{1}(\\b'+common_control_script_arr[i].asis+'\\b)[\\s\\t]*[\\=]{1}[\\w\\d\\_\\s\\t\\t\\(\\)\\\\+\\,\\[\\]\\"\\.\\-ㄱ-ㅎ가-힣]*[\\;]{1}', 'gi');
+                                            	
+	                                            if (script_arr[j].search(regex_function3) >= 0) {
+	                                                var match_arr = script_arr[j].match(regex_function3);
+	                                                if (match_arr != null && match_arr.length > 0) {
+	                                                    for(var k=0; k<match_arr.length; k++) {
+	                                                        var control_val  = match_arr[k].substring(match_arr[k].indexOf("=")+1, match_arr[k].length-1).trim();
+	                                                        var control_text = match_arr[k].substring(0, match_arr[k].indexOf("."));
+	                                                        
+	                                                        if (common_control_script_arr[i].asis == "value" || common_control_script_arr[i].asis == "text") {
+	                                                        	script_arr[j] = script_arr[j].replace(match_arr[k], control_text +'.setValue('+control_val+');');
+	                                                        } else {
+	                                                        	script_arr[j] = script_arr[j].replace(match_arr[k], control_text +'.setSelectedTabIndex('+control_val+');');	
+	                                                        }
+	                                                    }
+	                                                }
+	                                            } else {
+	                                            	if (common_control_script_arr[i].asis == "value" || common_control_script_arr[i].asis == "text") {
+	                                            		script_arr[j] = script_arr[j].replace(regex_function,".getValue()");
+	                                            	} else {
+	                                            		script_arr[j] = script_arr[j].replace(regex_function,".getSelectedTabIndex()");	
+	                                            	}	
+	                                            }	
+                                            }
+                                        }
+                                        
+                                        // index 처리
+                                        if (common_control_script_arr[i].asis == "index") {
+                                            if (script_arr[j].search(regex_function2) >= 0) {
+                                                var match_arr = script_arr[j].match(regex_function2);
+                                                if (match_arr != null && match_arr.length > 0) {
+                                                    for(var k=0; k<match_arr.length; k++) {
+                                                        var control_val  = match_arr[k].substring(match_arr[k].indexOf("=")+1, match_arr[k].length-1).trim();
+                                                        var control_text = match_arr[k].substring(0, match_arr[k].indexOf("."));
+                                                        script_arr[j] = script_arr[j].replace(match_arr[k], control_text +'.setSelectedIndex('+control_val+');');
+                                                    }
+                                                }
+                                            } else {
+                                                script_arr[j] = script_arr[j].replace(regex_function,".getSelectedIndex()");
+                                            }
+                                        }                                        
+                                        
+                                        if (common_control_script_arr[i].asis == "userData") {
+                                            if (script_arr[j].search(regex_function2) >= 0) {
+                                                var match_arr = script_arr[j].match(regex_function2);
+                                                if (match_arr != null && match_arr.length > 0) {
+                                                    for(var k=0; k<match_arr.length; k++) {
+                                                        var control_val  = match_arr[k].substring(match_arr[k].indexOf("=")+1, match_arr[k].length-1).trim();
+                                                        var control_text = match_arr[k].substring(0, match_arr[k].indexOf("."));
+                                                        script_arr[j] = script_arr[j].replace(match_arr[k], control_text +'.setIndex('+control_val+');');
+                                                    }
+                                                }
+                                            } else {
+                                                script_arr[j] = script_arr[j].replace(regex_function,".getIndex()");
+                                            }
+                                        }                                                                                
+
+                                        // enable 처리
+                                        if (common_control_script_arr[i].asis == "enable") {
+                                            if (script_arr[j].search(regex_function2) >= 0) {
+                                                var match_arr = script_arr[j].match(regex_function2);
+                                                if (match_arr != null && match_arr.length > 0) {
+
+                                                    for(var k=0; k<match_arr.length; k++) {
+                                                        var control_val  = match_arr[k].substring(match_arr[k].indexOf("=")+1, match_arr[k].length-1).trim();
+                                                        var control_text = match_arr[k].substring(0, match_arr[k].indexOf("."));
+
+                                                        // true, false 값을 반대로 세팅
+                                                        var booleanYn = false;
+                                                        if (control_val.replace(/[\"\s\t]/g, "").toLowerCase() ==  "false") {
+                                                            control_val = "true";
+                                                            booleanYn = true;
+                                                        } else if (control_val.replace(/[\"\s\t]/g, "").toLowerCase() ==  "true") {
+                                                            control_val = "false";
+                                                            booleanYn = true;
+                                                        } else {
+                                                            control_val = control_val.replace(/[\"\s\t]/g, "")
+                                                        }
+                                                        if (booleanYn) {
+                                                        	script_arr[j] = script_arr[j].replace(match_arr[k], control_text +'.setDisabled('+control_val+');');
+                                                    	} else {
+                                                    		// 일반 변수로 작업한 경우 !로 반대표시
+                                                    		script_arr[j] = script_arr[j].replace(match_arr[k], control_text +'.setDisabled(!'+control_val+');');
+                                                    	}
+                                                    }
+                                                }
+                                            } else {
+                                                // == 로 비교값이 있는 경우에만 replace 처리를 한다.
+                                                var regex_function3 = new RegExp('[\\w\\_]+[\\.]{1}(\\b'+common_control_script_arr[i].asis+'\\b)[\\s\\t]*[\\=]{2}[\\s\\t]*[\\"|\\w\\_]+', 'gi');
+
+                                                if (script_arr[j].search(regex_function3) >= 0) {
+                                                    var match_arr = script_arr[j].match(regex_function3);
+                                                    if (match_arr != null && match_arr.length > 0) {
+
+                                                        for(var k=0; k<match_arr.length; k++) {
+                                                            var control_val  = match_arr[k].substring(match_arr[k].indexOf("==")+2, match_arr[k].length).trim();
+                                                            var control_text = match_arr[k].substring(0, match_arr[k].indexOf("."));
+
+                                                            // true, false 값을 반대로 세팅
+                                                            if (control_val.replace(/[\"\s\t]/, "").toLowerCase() ==  "false") {
+                                                                control_val = "true";
+                                                            } else if (control_val.replace(/[\"\s\t]/, "").toLowerCase() ==  "true") {
+                                                                control_val = "false";
+                                                            } else {
+                                                                control_val = control_val.replace(/[\"\s\t]/, "");
+                                                            }
+                                                            script_arr[j] = script_arr[j].replace(match_arr[k], control_text +'.getDisabled() == ' +  control_val);
+                                                        }
+                                                    }
+                                                } else {
+                                                    // 없는 경우 ! 를 하나 더 붙여준다.
+                                                    script_arr[j] = script_arr[j].replace(match_arr[k], '!' + control_text +'.getDisabled()');
+                                                }
+                                            }
+                                        }
+                                        
+                                        // visible 처리
+                                        if (common_control_script_arr[i].asis == "visible") {
+                                            if (script_arr[j].search(regex_function2) >= 0) {
+                                                var match_arr = script_arr[j].match(regex_function2);
+                                                if (match_arr != null && match_arr.length > 0) {
+
+                                                    for(var k=0; k<match_arr.length; k++) {
+                                                        var control_val  = match_arr[k].substring(match_arr[k].indexOf("=")+1, match_arr[k].length-1).trim();
+                                                        var control_text = match_arr[k].substring(0, match_arr[k].indexOf("."));
+
+                                                        // true, false 세팅
+                                                        if (control_val.replace(/[\"\s\t]/, "").toLowerCase() ==  "false") {
+                                                            control_val = "false";
+                                                        } else if (control_val.replace(/[\"\s\t]/, "").toLowerCase() ==  "true") {
+                                                            control_val = "true";
+                                                        } else {
+                                                            control_val = control_val.replace(/[\"\s\t]/, "")
+                                                        }
+                                                        
+                                                        if (control_val == "true") {
+                                                        	script_arr[j] = script_arr[j].replace(match_arr[k], control_text +'.show();');
+                                                        } else if (control_val == "false") {
+                                                        	script_arr[j] = script_arr[j].replace(match_arr[k], control_text +'.hide();');
+                                                    	}	
+                                                        
+                                                    }
+                                                }
+                                            } else {
+                                                // == 로 비교값이 있는 경우에만 replace 처리를 한다.
+                                                var regex_function3 = new RegExp('[\\w\\_]+[\\.]{1}(\\b'+common_control_script_arr[i].asis+'\\b)[\\s\\t]*[\\=]{2}[\\s\\t]*[\\"|\\w\\_]+', 'gi');
+
+                                                if (script_arr[j].search(regex_function3) >= 0) {
+                                                    var match_arr = script_arr[j].match(regex_function3);
+                                                    if (match_arr != null && match_arr.length > 0) {
+
+                                                        for(var k=0; k<match_arr.length; k++) {
+                                                            var control_val  = match_arr[k].substring(match_arr[k].indexOf("==")+2, match_arr[k].length).trim();
+                                                            var control_text = match_arr[k].substring(0, match_arr[k].indexOf("."));
+
+                                                            // true, false 값을 반대로 세팅
+                                                            if (control_val.replace(/[\"\s\t]/, "").toLowerCase() ==  "false" || control_val.replace(/[\"\s\t]/, "").toLowerCase() ==  "0") {
+                                                                control_val = "false";
+                                                            } else if (control_val.replace(/[\"\s\t]/, "").toLowerCase() ==  "true" || control_val.replace(/[\"\s\t]/, "").toLowerCase() ==  "1") {
+                                                                control_val = "true";
+                                                            } else {
+                                                                control_val = control_val.replace(/[\"\s\t]/, "")
+                                                            }
+                                                            
+                                                            if (control_val == "true") {
+	                                                        	script_arr[j] = script_arr[j].replace(match_arr[k], control_text +'.getStyle("display") != \"none\"');
+	                                                        } else if (control_val == "false") {
+	                                                        	script_arr[j] = script_arr[j].replace(match_arr[k], control_text +'.getStyle("display") ==  \"none\"');
+	                                                    	}	
+                                                        }
+                                                    }
+                                                } else {
+                                                    // 사용자가 직접 판단 
+                                                    //script_arr[j] = script_arr[j].replace(match_arr[k], '!' + control_text +'.getStyle("display")');
+                                                }
+                                            }
+                                        }    
+                                        
+                                    }  // if of common_control_script_arr[i].type == "custom") {
+                                }
+                            }  // end of for script_arr
+                        }
+                    }  // end of for common_control_script_arr
+                }
+
+                tobe_arr.splice(script_start+1, script_end-(script_start)-1, script_arr.join("\n"));
+                document.getElementById("txt_new").value = tobe_arr.join("\n");
+
+            }  // end of fn_replace_common_control_tobe
+
+
+            // 명칭변경 컴포넌드 전환
+            fn_replace_change_name_control_tobe = function() {
+
+                var tobe_text = document.getElementById("txt_new").value;
+                var tobe_arr  = tobe_text.split("\n");
+
+                var script_start = tobe_arr.findIndex(function(text){return text.includes("<script lazy=\"false\" type=\"text\/javascript\"\>");});
+                var script_end   = tobe_arr.findIndex(function(text){return text.includes("\]\]><\/script>");});
+
+                var script_arr   = tobe_arr.slice(script_start+1, script_end);
+                var script_text  = script_arr.join("\n");
+
+
+                if (change_control_arr != null && change_control_arr.length > 0) {
+                    // 속성별 스크립트 데이터셋
+                    for (var i=0; i<change_control_arr.length; i++) {
+                    	
+                        // 데이터셋 스크립트 변경 배열
+                        if (script_arr != null && script_arr.length > 0) {
+                            for (var j=0; j<script_arr.length; j++) {
+
+                                var regex_function = new RegExp('\\b'+change_control_arr[i].asis+'\\b', 'ig');
+                                
+                                if (script_arr[j].search(regex_function) >= 0) {
+                                	script_arr[j] = script_arr[j].replace(regex_function, change_control_arr[i].tobe); 
+                                }	
+                                
+                            }  // end of for script_arr
+                        }
+                    }  // end of for common_control_script_arr
+                }
+
+                tobe_arr.splice(script_start+1, script_end-(script_start)-1, script_arr.join("\n"));
+                document.getElementById("txt_new").value = tobe_arr.join("\n");
+
+            }  // end of fn_replace_common_control_tobe
+
+
+
+            // key 다운
+            function fn_key_down() {
+                if (event.keyCode == 113) {
+                    fn_websquare_change();
+                }
+            }
+
+        </script>
+    </head>
+    <body onkeydown="javascript:fn_key_down();">
+        <h1>화면 마이플래폼 전환</h1>
+            <form action="action" id="f_change" name="f_change">
+                <b>데이터셋</b><br/>
+                <textarea id="txt_control" name="txt_control" rows="8" style="width:1000px;height:180px;"></textarea>
+                <br/>
+                <b>AS-IS XML 소스</b><br/>
+                <textarea id="txt_asis" name="txt_asis" rows="8" style="width:1000px;height:200px;"></textarea>
+                <br/><b>TO-BE XML 소스</b><br/>
+                <textarea id="txt_tobe" name="txt_tobe" rows="8" style="width:1000px;height:200px;"></textarea>
+                <br/><b>생성 XML 소스</b><br/>
+                <textarea id="txt_new" name="txt_tobe" rows="8" style="width:1000px;height:200px;"></textarea>
+            </form>
+            <input type="button" name="btn" id="btn" value="변환(F2)" onclick="javascript:fn_websquare_change();"/>
+    </body>
+</html>
