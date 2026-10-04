@@ -29,7 +29,7 @@ git remote add origin https://github.com/ysrrr77/first.git
 git push -u origin main
 */
 
-4. vs code 에서 
+4. vscode 에서 
 
 Terminal > new Terminal 
 
@@ -87,7 +87,7 @@ git push origin main
 
 
 ------------------------------------------------------------------------------------------------------
-삭제된 파일 복구 (checkout)
+삭제된 파일 복구 (checkout) revert, reset, checkout
 
 git log -- "src/main/webapp/git copy.txt" : 로그를 통한 버전 확인
 
@@ -106,7 +106,6 @@ git push origin main
 
 git clone "https://github.com/ysrrr77/first.git" "D:\myprjtest" 
 
-
 ------------------------------------------------------------------------------------------------------
 
 
@@ -117,10 +116,13 @@ git checkout -b newBranch : 새로운 branch 또는 git branch 브랜치명,
 
 git switch -c 브랜치명 : 새로운 브랜치 생성 및 이동
 
+git switch 브랜치명 : 해당 브랜치로 이동
+
 git push origin newBranch
 
 >> branch 가 새로 생긴다. 깃허브에서 pull request 요청을 하고, merge confirm 을 처리한다.
 compare & pull request > create pull request > confrim merge 로 머지한다.
+--> git hub 에서 merge 처리 방법
 
 >> branch 삭제 git branch -d 브랜치명 (다른 브랜치에 위치한 이후 사용이 가능하다. 해당 브랜치 내용이 변경이 있으면 삭제 불가능) 
  
@@ -139,9 +141,9 @@ git switch main : main branch 로 변경
 >> 각각의 브랜치에서 수정 후 commit 처리한다
 >> ex) git switch coopon > 수정 > git add . > git commit -m "coopon에서 수정"
 >> ex) git switch main > 수정 > git add . > git commit -m "메인에서 수정"
->> git merge coopon : main 에서 coopon 의 차이점으로 머지
+>> git merge coopon : main 에서 coopon 의 차이점으로 머지 (rebase 는 coopon 에서 main 을 처리한다.)
 >> 에디터에서 수정 > git add . > git commit -m "수동으로 머지"
->> git push origin merge 로 해경
+>> git push origin merge 로 해결?
 
 ------------------------------------------------------------------------------------------------------
 
@@ -176,7 +178,6 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 test/ : test 디렉토리
 test.* : test 명인 모든 파일
 /file.c : 상위 file.c 
-
 ------------------------------------------------------------------------------------------------------
 
 
