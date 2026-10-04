@@ -117,6 +117,7 @@ git checkout -b newBranch : 새로운 branch
 git push origin newBranch
 
 >> branch 가 새로 생긴다. 깃허브에서 pull request 요청을 하고, merge confirm 을 처리한다.
+compare & pull request > create pull request > confrim merge 로 머지한다.
 
 ------------------------------------------------------------------------------------------------------
 
