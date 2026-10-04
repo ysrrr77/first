@@ -12,6 +12,8 @@ git config --global user.name "yang.yang"
 git config --global user.email "ysrrr77@daum.net"
 
 git config --list
+
+상단수정
 ------------------------------------------------------------------------------------------------------
 
 
