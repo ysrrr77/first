@@ -12,6 +12,16 @@ git config --global user.name "yang.yang"
 git config --global user.email "ysrrr77@daum.net"
 
 git config --list
+
+사용자 삭제
+git config --global --unset user.name
+
+이래도 안되면 
+git config --global --replace-all user.name
+
+확인
+git config user.name  
+
 ------------------------------------------------------------------------------------------------------
 
 
@@ -62,6 +72,35 @@ git stauts
 git commit -m "second commit"
 
 git push origin main
+------------------------------------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------------------------------------
+커밋관련 샘플
+
+1. push 하지 않은 commit 목록 조회
+git log origin/main..HEAD --oneline
+
+2. commit 취소
+
+> staged changes 에도 빼고 파일 수정 상태만 유지한채
+git reset HEAD~1
+
+> staged changes 에는 빼지않고 파일 수정 상태만 유지한채
+git reset --soft HEAD~1
+
+> 파일내용까지 취소 (추찬하지 않음)
+git reset --haed HEAD~1 (추천하지 않음)
+
+> 커밋이 2개 이상이라면
+git reset --soft HEAD~2 (최근 2개를 취소)
+
+
+3. STAGED 영역 취소
+git resotre --staged .
+>특정파일만
+git resotre --staged 파일경로
+
 ------------------------------------------------------------------------------------------------------
 
 
