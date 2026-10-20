@@ -13,11 +13,92 @@ export → 이름을 지정해 내보내기, 가져올 때 {} 사용
 주 용도         대표 컴포넌트                    여러 함수나 상수 등
 
 
+3. JSX란 JavaScript XML의 약자로, JavaScript 코드 안에서 HTML과 비슷한 문법을 사용해 UI(사용자 인터페이스)를 
+작성할 수 있도록 해주는 문법 확장입니다. 주로 React에서 웹 화면을 만들 때 사용합니다
+
+> JSX를 사용하는 이유
+일반 JavaScript와 JSX를 비교해 보겠습니다.
+
+① 일반 JavaScript
+
+javascript
+const element = document.createElement("h1");
+element.textContent = "안녕하세요!";
+
+② JSX
+jsx
+const element = <h1>안녕하세요!</h1>;
+JSX를 사용하면 화면의 구조를 직관적으로 작성할 수 있어 코드가 읽기 쉽고 관리하기 편합니다.
 
 
+4. useState란?
+useState는 컴포넌트에서 변하는 값을 저장하고, 그 값이 변경되면 화면을 다시 렌더링하도록 하는 React Hook입니다.
+
+예를 들어 버튼을 누를 때마다 숫자가 증가하는 화면을 만들 수 있어요.
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>숫자: {count}</p>
+      <button onClick={() => setCount(count + 1)}>
+        증가
+      </button>
+    </div>
+  );
+}
 
 
+2. useState는 언제 많이 사용할까요?
+사용 사례
 
+상태 예시
 
+버튼 클릭
 
+클릭 횟수
 
+입력창
+
+사용자 입력값
+
+로그인 화면
+
+로그인 여부
+
+모달 창
+
+열림 / 닫힘
+
+탭 메뉴
+
+현재 선택된 탭
+
+검색 기능
+
+검색어
+
+체크박스
+
+체크 여부
+
+장바구니
+
+상품 목록
+
+실제 프로젝트에서도 자주 사용합니다.
+
+3. useState 문법 이해하기
+
+jsx
+const [count, setCount] = useState(0);
+각 부분의 의미는 다음과 같습니다.
+
+count: 현재 상태값
+
+setCount: 상태값을 변경하는 함수
+
+useState(0): 초기 상태값을 0으로 설정
+
+상태를 변경할 때는 다음처럼 작성합니다.
