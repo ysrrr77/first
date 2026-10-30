@@ -3,6 +3,15 @@
 
 npx create-react-app blog
 
+--리액트 라우터 설치
+npm install react-router-dom
+/*
+라우터 설치 오류시 아래와 같이 하고 다시 설치
+npm uninstall node-sass
+npm install sass
+*/
+
+
 2. 브라우져보기
 
 npm start
